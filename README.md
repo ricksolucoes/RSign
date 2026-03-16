@@ -82,7 +82,7 @@ O objetivo do RSign é permitir assinatura local de arquivos com uma aplicação
 
 ## 4. Escopo funcional
 
-## 4.1. Certificado
+### 4.1. Certificado
 
 O projeto trabalha inicialmente com **certificado autoassinado** exportado em **`.pfx`**.
 
@@ -91,14 +91,14 @@ O sistema também já nasce preparado para cenários futuros:
 * uso de **PFX externo**;
 * uso de **certificado real de Code Signing**.
 
-### Regras definidas
+#### Regras definidas
 
 * o artefato final persistente deve ser um arquivo `.pfx`;
 * o certificado não deve permanecer instalado como resultado final da operação;
 * a senha padrão pode ser mantida inicialmente como `123456`, mas deve ser editável pela interface;
 * se o PFX existir e apresentar problema, o sistema deve explicar a situação e aguardar a decisão do usuário.
 
-## 4.2. Extensões suportadas
+### 4.2. Extensões suportadas
 
 O RSign trabalha com extensões conhecidas e previamente aprovadas:
 
@@ -108,14 +108,14 @@ O RSign trabalha com extensões conhecidas e previamente aprovadas:
 * `.cab`
 * `.cat`
 
-## 4.3. Estratégia de saída
+### 4.3. Estratégia de saída
 
 Quando um arquivo for assinado, a regra aprovada é esta:
 
 1. renomear o arquivo original com sufixo `_OLD`;
 2. manter o arquivo assinado com o nome original.
 
-### Exemplo
+#### Exemplo
 
 Arquivo antes da assinatura:
 
@@ -130,7 +130,7 @@ MeuSistema_OLD.exe
 MeuSistema.exe
 ```
 
-## 4.4. Modos de operação
+### 4.4. Modos de operação
 
 A aplicação deve permitir dois cenários:
 
@@ -139,7 +139,7 @@ A aplicação deve permitir dois cenários:
 
 Essa escolha será feita pela interface.
 
-## 4.5. Verificação pós-assinatura
+### 4.5. Verificação pós-assinatura
 
 A aplicação deve permitir verificar ou não a assinatura ao final do processo.
 
@@ -147,7 +147,7 @@ O padrão inicial será:
 
 * **verificação ativada**
 
-## 4.6. Resolução do `signtool.exe`
+### 4.6. Resolução do `signtool.exe`
 
 A aplicação deve:
 
@@ -156,14 +156,14 @@ A aplicação deve:
 * preferir a versão mais nova encontrada;
 * permitir que o usuário substitua essa escolha.
 
-## 4.7. Execução local
+### 4.7. Execução local
 
 O uso do RSign será local, em ambiente Windows, com dois comportamentos possíveis:
 
 * uso manual pela interface;
 * automação interna do próprio fluxo, quando os dados já estiverem suficientes para isso.
 
-## 4.8. Permissões administrativas
+### 4.8. Permissões administrativas
 
 A aplicação não deve exigir execução como administrador em todos os cenários.
 
@@ -173,11 +173,11 @@ Ela deve tentar operar com privilégio normal e só exigir elevação quando alg
 
 A UI foi definida em **3 abas principais**, separando os dados do certificado, o comportamento da assinatura e os caminhos físicos usados na operação.
 
-## 5.1. Aba 1 — Perfil do Certificado
+### 5.1. Aba 1 — Perfil do Certificado
 
 Essa aba concentra os dados de identidade e o perfil de uso do certificado.
 
-### Campos previstos
+#### Campos previstos
 
 * nome do certificado;
 * nome da empresa;
@@ -191,23 +191,22 @@ Essa aba concentra os dados de identidade e o perfil de uso do certificado.
 * senha do PFX;
 * confirmação da senha;
 * tipo do certificado:
-
   * autoassinado;
   * PFX externo;
   * futuro suporte a Code Signing real.
 
-### Regras dessa aba
+#### Regras dessa aba
 
 * todos os valores padrão devem ser editáveis;
 * a UI deve indicar se o certificado será criado, reutilizado, validado ou substituído;
 * o perfil ativo do certificado deve ficar visível;
 * o modo atual do projeto deve deixar claro que o resultado final é um `.pfx`.
 
-## 5.2. Aba 2 — Configuração da Assinatura
+### 5.2. Aba 2 — Configuração da Assinatura
 
 Essa aba controla o comportamento operacional do processo.
 
-### Campos previstos
+#### Campos previstos
 
 * caminho manual do `signtool.exe`;
 * opção para localizar automaticamente o `signtool`;
@@ -224,18 +223,18 @@ Essa aba controla o comportamento operacional do processo.
   * arquivo
   * ambos
 
-### Regras dessa aba
+#### Regras dessa aba
 
 * a verificação pós-assinatura deve vir ativada por padrão;
 * o timestamp precisa ser configurável;
 * se houver falha no timestamp, o sistema deve perguntar antes de seguir sem ele;
 * a escolha automática da versão mais nova do `signtool` deve ser o comportamento padrão.
 
-## 5.3. Aba 3 — Locais e Arquivos
+### 5.3. Aba 3 — Locais e Arquivos
 
 Essa aba reúne os caminhos físicos usados pelo processo.
 
-### Bloco 1 — Certificado PFX
+#### Bloco 1 — Certificado PFX
 
 * local onde o PFX será salvo;
 * nome do arquivo PFX;
@@ -243,21 +242,21 @@ Essa aba reúne os caminhos físicos usados pelo processo.
 * botão para localizar PFX existente;
 * botão para criar novo PFX.
 
-### Bloco 2 — Origem dos arquivos
+#### Bloco 2 — Origem dos arquivos
 
 * seleção de um arquivo específico;
 * seleção de uma pasta;
 * lista dos arquivos compatíveis encontrados;
 * filtro por extensões suportadas.
 
-### Bloco 3 — Destino dos arquivos
+#### Bloco 3 — Destino dos arquivos
 
 * pasta de saída;
 * opção para reutilizar a mesma pasta do arquivo original;
 * indicação visual da política `_OLD`;
 * prévia clara de origem, destino e nome final esperado.
 
-### Regras dessa aba
+#### Regras dessa aba
 
 * o local e o nome do PFX devem ser definidos pelo usuário;
 * o usuário deve poder escolher entre pasta ou arquivo;
@@ -266,7 +265,7 @@ Essa aba reúne os caminhos físicos usados pelo processo.
 
 ## 6. Fluxo de execução
 
-## 6.1. Fluxo principal
+### 6.1. Fluxo principal
 
 O fluxo principal da aplicação deve seguir esta sequência:
 
@@ -285,7 +284,7 @@ O fluxo principal da aplicação deve seguir esta sequência:
 13. registrar logs;
 14. exibir resultado amigável e técnico.
 
-## 6.2. Validação do certificado
+### 6.2. Validação do certificado
 
 Ao encontrar um arquivo `.pfx`, o sistema deve validar:
 
@@ -297,7 +296,7 @@ Ao encontrar um arquivo `.pfx`, o sistema deve validar:
 * vigência do certificado;
 * aptidão para uso em assinatura.
 
-## 6.3. Criação do certificado
+### 6.3. Criação do certificado
 
 A estratégia técnica definida para criação é:
 
@@ -308,7 +307,7 @@ A estratégia técnica definida para criação é:
 
 > O uso do store é apenas transitório durante a criação. O resultado funcional do projeto continua sendo o arquivo `.pfx`.
 
-## 6.4. Fluxo de arquivo único
+### 6.4. Fluxo de arquivo único
 
 1. o usuário escolhe um arquivo suportado;
 2. o sistema valida extensão, existência e acesso;
@@ -319,21 +318,18 @@ A estratégia técnica definida para criação é:
 7. o sistema verifica a assinatura, se habilitado;
 8. o sistema grava logs e apresenta o resultado.
 
-## 6.5. Fluxo de lote por pasta
+### 6.5. Fluxo de lote por pasta
 
 1. o usuário escolhe uma pasta;
 2. o sistema varre os arquivos pelas extensões suportadas;
 3. o sistema monta a lista de processamento;
 4. para cada item, o sistema:
-
    * valida o arquivo;
    * prepara `_OLD`;
    * assina;
    * verifica, se habilitado;
    * grava o resultado individual;
 5. ao final, apresenta um consolidado com sucessos, avisos e falhas.
-
----
 
 ## 7. Regras de decisão assistida
 
@@ -347,7 +343,7 @@ Nesses casos, o comportamento obrigatório é:
 4. apresentar opções coerentes;
 5. aguardar decisão explícita do usuário.
 
-## 7.1. Situações típicas que exigem decisão
+### 7.1. Situações típicas que exigem decisão
 
 * PFX encontrado, mas com senha inválida;
 * PFX corrompido;
@@ -359,7 +355,7 @@ Nesses casos, o comportamento obrigatório é:
 * arquivo em uso ou bloqueado;
 * conflito com `_OLD` já existente.
 
-## 7.2. Regra específica para timestamp
+### 7.2. Regra específica para timestamp
 
 Se o timestamp falhar, o sistema deve:
 
@@ -371,7 +367,7 @@ Se o timestamp falhar, o sistema deve:
 
 A aplicação foi pensada em camadas leves, com responsabilidades separadas e fluxo centralizado.
 
-## 8.1. Princípios adotados
+### 8.1. Princípios adotados
 
 * separação de responsabilidades;
 * baixo acoplamento;
@@ -380,30 +376,27 @@ A aplicação foi pensada em camadas leves, com responsabilidades separadas e fl
 * orquestração central do fluxo;
 * estrutura preparada para evolução futura.
 
-## 8.2. Camadas previstas
+### 8.2. Camadas previstas
 
-### Camada de UI
+#### Camada de UI
 
 Responsável por:
-
 * exibir dados;
 * coletar escolhas do usuário;
 * mostrar mensagens e logs;
 * acionar o orquestrador.
 
-### Camada de Orquestração
+#### Camada de Orquestração
 
 Responsável por:
-
 * controlar o fluxo completo;
 * chamar os serviços na ordem correta;
 * consolidar resultados;
 * decidir quando interromper ou pedir decisão ao usuário.
 
-### Camada de Serviços
+#### Camada de Serviços
 
 Responsável por tarefas especializadas:
-
 * validar certificado;
 * criar certificado;
 * localizar `signtool`;
@@ -412,15 +405,14 @@ Responsável por tarefas especializadas:
 * verificar assinatura;
 * registrar logs.
 
-### Camada de Configuração
+#### Camada de Configuração
 
 Responsável por:
-
 * armazenar padrões;
 * ler preferências salvas;
 * persistir ajustes do usuário.
 
-### Camada de Modelos
+#### Camada de Modelos
 
 Responsável por transportar dados entre UI, serviços e orquestrador.
 
@@ -547,20 +539,18 @@ Tela complementar para persistência e edição de parâmetros, caso isso seja s
 
 Tela ou painel dedicado para exibição detalhada dos logs.
 
----
-
 ## 11. Modelos e tipos previstos
 
 Os nomes abaixo representam a base lógica esperada do projeto.
 
-## 11.1. Tipos de configuração
+### 11.1. Tipos de configuração
 
 * `TConfiguracaoAssinatura`
 * `TConfiguracaoSigntool`
 * `TConfiguracaoLog`
 * `TDadosCertificado`
 
-## 11.2. Tipos de status e resultado
+### 11.2. Tipos de status e resultado
 
 * `TStatusCertificado`
 * `TStatusSigntool`
@@ -569,7 +559,7 @@ Os nomes abaixo representam a base lógica esperada do projeto.
 * `TResultadoVerificacao`
 * `TResultadoLote`
 
-## 11.3. Enums prováveis
+### 11.3. Enums prováveis
 
 * `TTipoCertificado`
 * `TModoAssinatura`
@@ -580,7 +570,6 @@ Os nomes abaixo representam a base lógica esperada do projeto.
 ## 12. Configurações padrão
 
 Os padrões iniciais aprovados até aqui são:
-
 * senha padrão do PFX: `123456`;
 * verificação pós-assinatura: ligada;
 * resolução automática do `signtool`: ligada;
@@ -591,21 +580,21 @@ Os padrões iniciais aprovados até aqui são:
 
 ## 13. Requisitos de ambiente
 
-## 13.1. Sistema operacional
+### 13.1. Sistema operacional
 
 * Windows
 * execução local
 
-## 13.2. Ferramentas de desenvolvimento
+### 13.2. Ferramentas de desenvolvimento
 
 * Delphi 10+ com suporte FMX
 
-## 13.3. Dependências externas
+### 13.3. Dependências externas
 
 * PowerShell disponível no sistema operacional;
 * `signtool.exe` instalado ou acessível manualmente.
 
-## 13.4. Origem esperada do `signtool.exe`
+### 13.4. Origem esperada do `signtool.exe`
 
 O `signtool.exe` normalmente será encontrado em instalações do:
 
@@ -614,7 +603,7 @@ O `signtool.exe` normalmente será encontrado em instalações do:
 
 A aplicação também deve permitir informar o caminho manualmente.
 
-## 13.5. Permissões
+### 13.5. Permissões
 
 A aplicação deve operar com o menor nível de privilégio possível. Apenas etapas que realmente exigirem elevação deverão depender disso.
 
@@ -634,7 +623,7 @@ Compilar o RSign gera o executável da ferramenta, mas o ambiente de execução 
 
 ## 15. Como usar
 
-## 15.1. Cenário A — Assinar com PFX existente
+### 15.1. Cenário A — Assinar com PFX existente
 
 1. abra o RSign;
 2. revise a aba **Perfil do Certificado**;
@@ -648,7 +637,7 @@ Compilar o RSign gera o executável da ferramenta, mas o ambiente de execução 
 10. o sistema verifica a assinatura, se essa opção estiver ativa;
 11. o resultado é exibido e registrado em log.
 
-## 15.2. Cenário B — Assinar sem PFX existente
+### 15.2. Cenário B — Assinar sem PFX existente
 
 1. abra o RSign;
 2. preencha os dados do certificado na aba **Perfil do Certificado**;
@@ -662,7 +651,7 @@ Compilar o RSign gera o executável da ferramenta, mas o ambiente de execução 
 10. o certificado temporário é removido;
 11. o fluxo segue normalmente para a assinatura.
 
-## 15.3. Cenário C — Falha no timestamp
+### 15.3. Cenário C — Falha no timestamp
 
 1. o processo chega à etapa de timestamp;
 2. o servidor falha ou fica indisponível;
@@ -671,7 +660,7 @@ Compilar o RSign gera o executável da ferramenta, mas o ambiente de execução 
 5. o usuário escolhe continuar ou cancelar;
 6. a execução segue conforme essa decisão.
 
-## 15.4. Cenário D — Assinatura em lote
+### 15.4. Cenário D — Assinatura em lote
 
 1. o usuário escolhe uma pasta;
 2. o sistema lista os arquivos compatíveis;
@@ -682,14 +671,12 @@ Compilar o RSign gera o executável da ferramenta, mas o ambiente de execução 
 ## 16. Logs e rastreabilidade
 
 A política de logs do projeto precisa atender dois perfis de uso:
-
 1. o usuário operacional, que precisa entender o que aconteceu;
 2. o usuário técnico, que precisa diagnosticar falhas com rapidez.
 
-## 16.1. Log amigável
+### 16.1. Log amigável
 
 Exemplos do que deve conter:
-
 * início da operação;
 * certificado encontrado;
 * certificado criado com sucesso;
@@ -699,10 +686,9 @@ Exemplos do que deve conter:
 * aviso de falha em timestamp;
 * resumo final da operação.
 
-## 16.2. Log técnico
+### 16.2. Log técnico
 
 Exemplos do que deve conter:
-
 * caminho do arquivo processado;
 * caminho do PFX utilizado;
 * caminho e versão do `signtool`;
@@ -712,34 +698,29 @@ Exemplos do que deve conter:
 * retorno da verificação da assinatura;
 * decisão tomada pelo usuário em casos críticos.
 
-## 16.3. Persistência dos logs
+### 16.3. Persistência dos logs
 
 A aplicação deve conseguir:
-
 * exibir logs em tela;
 * gravar logs em arquivo;
 * operar nos dois formatos ao mesmo tempo.
 
 ## 17. Regras operacionais e cuidados
 
-## 17.1. Senha padrão do PFX
+### 17.1. Senha padrão do PFX
 
 A senha padrão inicial permanece como `123456` por compatibilidade com o fluxo atual do projeto. Mesmo assim:
-
 * a interface deve permitir alteração;
 * a documentação deve deixar claro que isso é apenas um padrão inicial;
 * o projeto deve permitir evolução futura para políticas de senha mais rígidas.
 
-## 17.2. Uso de store temporário
-
+### 17.2. Uso de store temporário
 O projeto não usa store como destino final, mas a criação do certificado pode passar por store temporário por necessidade técnica da geração via PowerShell. Isso não altera a regra funcional do sistema, porque o artefato persistente continua sendo o `.pfx`.
 
-## 17.3. Arquivos em uso
-
+### 17.3. Arquivos em uso
 O sistema deve detectar arquivos bloqueados ou em uso e impedir operações silenciosas que possam gerar estado inconsistente ou perda de rastreabilidade.
 
-## 17.4. Elevação de privilégio
-
+### 17.4. Elevação de privilégio
 A aplicação deve evitar exigir administrador como regra fixa. A necessidade de elevação deve ser contextual.
 
 ## 18. Limitações do modelo inicial
@@ -749,7 +730,6 @@ O uso de certificado autoassinado atende ao cenário de assinatura técnica loca
 ### Impacto prático
 
 Um arquivo assinado com certificado autoassinado:
-
 * pode ser assinado com sucesso;
 * pode ser validado tecnicamente;
 * mas não terá, por padrão, o mesmo nível de confiança pública em máquinas de terceiros.
@@ -760,7 +740,7 @@ Por isso, a arquitetura já foi pensada para futura evolução para certificados
 
 A sequência recomendada de implementação é esta.
 
-## Fase 1 — Base estrutural
+### Fase 1 — Base estrutural
 
 * criação do projeto FMX;
 * definição dos tipos centrais;
@@ -768,14 +748,14 @@ A sequência recomendada de implementação é esta.
 * criação do logger;
 * criação do executor de processos.
 
-## Fase 2 — Signtool
+### Fase 2 — Signtool
 
 * localizar candidatos;
 * identificar versões;
 * permitir escolha automática e manual;
 * validar funcionamento do executável.
 
-## Fase 3 — Certificado
+### Fase 3 — Certificado
 
 * validar PFX;
 * criar certificado autoassinado;
@@ -783,32 +763,32 @@ A sequência recomendada de implementação é esta.
 * remover certificado temporário do store;
 * consolidar mensagens de status.
 
-## Fase 4 — Arquivos
+### Fase 4 — Arquivos
 
 * validar entrada;
 * varrer pasta;
 * filtrar extensões;
 * preparar a estratégia `_OLD` + arquivo assinado com nome original.
 
-## Fase 5 — Assinatura
+### Fase 5 — Assinatura
 
 * montar comando;
 * executar assinatura;
 * capturar retorno técnico.
 
-## Fase 6 — Verificação
+### Fase 6 — Verificação
 
 * executar verificação pós-assinatura;
 * consolidar sucesso, aviso ou falha.
 
-## Fase 7 — UI FMX
+### Fase 7 — UI FMX
 
 * construir as três abas principais;
 * integrar campos, botões e listagens;
 * exibir logs;
 * apresentar decisões ao usuário quando necessário.
 
-## Fase 8 — Refinos finais
+### Fase 8 — Refinos finais
 
 * persistência definitiva das preferências;
 * revisão de mensagens;
