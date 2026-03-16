@@ -1,0 +1,9 @@
+{
+	"name": "RSign",
+	"description": "RSign é um utilitário local para Windows desenvolvido em Delphi 10.2 FMX para assinatura de arquivos compatíveis com Authenticode (.exe, .dll, .msi, .cab, .cat). Suporta certificado PFX autoassinado, validação completa, verificação pós-assinatura, logs detalhados e arquitetura preparada para futuros certificados de Code Signing.",
+	"version": "1.0.0",
+	"homepage": "",
+	"mainsrc": "./src",
+	"projects": [],
+	"dependencies": {}
+}
