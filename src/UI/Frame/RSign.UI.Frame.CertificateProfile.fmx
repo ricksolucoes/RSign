@@ -1,0 +1,348 @@
+object RSignFrameCertificateProfile: TRSignFrameCertificateProfile
+  Size.Width = 800.000000000000000000
+  Size.Height = 600.000000000000000000
+  Size.PlatformDefault = False
+  object FScrollBox: TVertScrollBox
+    Align = Client
+    Padding.Left = 12.000000000000000000
+    Padding.Top = 12.000000000000000000
+    Padding.Right = 12.000000000000000000
+    Padding.Bottom = 12.000000000000000000
+    Size.Width = 800.000000000000000000
+    Size.Height = 600.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    Viewport.Width = 800.000000000000000000
+    Viewport.Height = 600.000000000000000000
+    object FContainer: TLayout
+      Align = Center
+      Size.Width = 740.000000000000000000
+      Size.Height = 450.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object FPanelBackground: TRectangle
+        Align = Client
+        Fill.Color = xFFD2D8CE
+        Size.Width = 740.000000000000000000
+        Size.Height = 450.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Color = xFF4A5743
+        XRadius = 6.000000000000000000
+        YRadius = 6.000000000000000000
+        object LabelTipoCertificado: TLabel
+          StyledSettings = []
+          Opacity = 0.800000011920928900
+          Position.X = 16.000000000000000000
+          Position.Y = 16.000000000000000000
+          Size.Width = 250.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.Font.Size = 14.000000000000000000
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF1F281D
+          Text = 'Tipo do certificado'
+        end
+        object LabelNomeCertificado: TLabel
+          StyledSettings = []
+          Opacity = 0.800000011920928900
+          Position.X = 16.000000000000000000
+          Position.Y = 88.000000000000000000
+          Size.Width = 250.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.Font.Size = 14.000000000000000000
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF1F281D
+          Text = 'Nome do certificado'
+        end
+        object FEditNomeCertificado: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          StyleLookup = 'editstyle'
+          TabOrder = 0
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF6D7868
+          Position.X = 16.000000000000000000
+          Position.Y = 112.000000000000000000
+          Size.Width = 705.000000000000000000
+          Size.Height = 36.000000000000000000
+          Size.PlatformDefault = False
+          TextPrompt = 'Ex.: RSignAutoCert'
+          StyledSettings = [Family, Size]
+        end
+        object LabelNomeEmpresa: TLabel
+          StyledSettings = []
+          Opacity = 0.800000011920928900
+          Position.X = 16.000000000000000000
+          Position.Y = 160.000000000000000000
+          Size.Width = 250.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.Font.Size = 14.000000000000000000
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF1F281D
+          Text = 'Nome da empresa'
+        end
+        object FEditNomeEmpresa: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          StyleLookup = 'editstyle'
+          TabOrder = 1
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF6D7868
+          Position.X = 16.000000000000000000
+          Position.Y = 184.000000000000000000
+          Size.Width = 705.000000000000000000
+          Size.Height = 36.000000000000000000
+          Size.PlatformDefault = False
+          TextPrompt = 'Ex.: Sua Empresa'
+          StyledSettings = [Family, Size]
+        end
+        object LabelOrganizacao: TLabel
+          StyledSettings = []
+          Opacity = 0.800000011920928900
+          Position.X = 16.000000000000000000
+          Position.Y = 232.000000000000000000
+          Size.Width = 250.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.Font.Size = 14.000000000000000000
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF1F281D
+          Text = 'Organiza'#231#227'o'
+        end
+        object FEditOrganizacao: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          StyleLookup = 'editstyle'
+          TabOrder = 2
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF6D7868
+          Position.X = 16.000000000000000000
+          Position.Y = 256.000000000000000000
+          Size.Width = 713.000000000000000000
+          Size.Height = 36.000000000000000000
+          Size.PlatformDefault = False
+          TextPrompt = 'Ex.: Minha Organiza'#231#227'o'
+          StyledSettings = [Family, Size]
+        end
+        object LabelDepartamento: TLabel
+          StyledSettings = []
+          Opacity = 0.800000011920928900
+          Position.X = 16.000000000000000000
+          Position.Y = 304.000000000000000000
+          Size.Width = 250.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.Font.Size = 14.000000000000000000
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF1F281D
+          Text = 'Departamento'
+        end
+        object FEditDepartamento: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          StyleLookup = 'editstyle'
+          TabOrder = 3
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF6D7868
+          Position.X = 16.000000000000000000
+          Position.Y = 328.000000000000000000
+          Size.Width = 200.000000000000000000
+          Size.Height = 36.000000000000000000
+          Size.PlatformDefault = False
+          TextPrompt = 'Ex.: TI'
+          StyledSettings = [Family, Size]
+        end
+        object LabelCidade: TLabel
+          StyledSettings = []
+          Opacity = 0.800000011920928900
+          Position.X = 224.000000000000000000
+          Position.Y = 304.000000000000000000
+          Size.Width = 169.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.Font.Size = 14.000000000000000000
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF1F281D
+          Text = 'Cidade'
+        end
+        object FEditCidade: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          StyleLookup = 'editstyle'
+          TabOrder = 4
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF6D7868
+          Position.X = 224.000000000000000000
+          Position.Y = 328.000000000000000000
+          Size.Width = 185.000000000000000000
+          Size.Height = 36.000000000000000000
+          Size.PlatformDefault = False
+          TextPrompt = 'Ex.: Rio de Janeiro'
+          StyledSettings = [Family, Size]
+        end
+        object LabelEstado: TLabel
+          StyledSettings = []
+          Opacity = 0.800000011920928900
+          Position.X = 416.000000000000000000
+          Position.Y = 304.000000000000000000
+          Size.Width = 49.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.Font.Size = 14.000000000000000000
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF1F281D
+          Text = 'Estado'
+        end
+        object FEditEstado: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          StyleLookup = 'editstyle'
+          TabOrder = 5
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF6D7868
+          Position.X = 416.000000000000000000
+          Position.Y = 328.000000000000000000
+          Size.Width = 113.000000000000000000
+          Size.Height = 36.000000000000000000
+          Size.PlatformDefault = False
+          TextPrompt = 'Ex.: RJ'
+          StyledSettings = [Family, Size]
+        end
+        object LabelPais: TLabel
+          StyledSettings = []
+          Opacity = 0.800000011920928900
+          Position.X = 536.000000000000000000
+          Position.Y = 304.000000000000000000
+          Size.Width = 113.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.Font.Size = 14.000000000000000000
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF1F281D
+          Text = 'Pa'#237's'
+        end
+        object FEditPais: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          StyleLookup = 'editstyle'
+          TabOrder = 6
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF6D7868
+          Position.X = 536.000000000000000000
+          Position.Y = 328.000000000000000000
+          Size.Width = 193.000000000000000000
+          Size.Height = 36.000000000000000000
+          Size.PlatformDefault = False
+          TextPrompt = 'Ex.: BR'
+          StyledSettings = [Family, Size]
+        end
+        object LabelEmail: TLabel
+          StyledSettings = []
+          Opacity = 0.800000011920928900
+          Position.X = 16.000000000000000000
+          Position.Y = 376.000000000000000000
+          Size.Width = 113.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.Font.Size = 14.000000000000000000
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF1F281D
+          Text = 'E-mail'
+        end
+        object FEditEmail: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          StyleLookup = 'editstyle'
+          TabOrder = 7
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF6D7868
+          Position.X = 16.000000000000000000
+          Position.Y = 400.000000000000000000
+          Size.Width = 209.000000000000000000
+          Size.Height = 36.000000000000000000
+          Size.PlatformDefault = False
+          TextPrompt = 'Ex.: contato@empresa.com'
+          StyledSettings = [Family, Size]
+        end
+        object LabelValidade: TLabel
+          StyledSettings = []
+          Opacity = 0.800000011920928900
+          Position.X = 232.000000000000000000
+          Position.Y = 376.000000000000000000
+          Size.Width = 121.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.Font.Size = 14.000000000000000000
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF1F281D
+          Text = 'Validade em dias'
+        end
+        object FEditValidadeDias: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          StyleLookup = 'editstyle'
+          TabOrder = 8
+          KeyboardType = NumberPad
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF6D7868
+          Position.X = 232.000000000000000000
+          Position.Y = 400.000000000000000000
+          Size.Width = 121.000000000000000000
+          Size.Height = 36.000000000000000000
+          Size.PlatformDefault = False
+          TextPrompt = 'Ex.: 365'
+          StyledSettings = [Family, Size]
+        end
+        object LabelSenha: TLabel
+          StyledSettings = []
+          Opacity = 0.800000011920928900
+          Position.X = 360.000000000000000000
+          Position.Y = 376.000000000000000000
+          Size.Width = 97.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.Font.Size = 14.000000000000000000
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF1F281D
+          Text = 'Senha do PFX'
+        end
+        object FEditSenha: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          StyleLookup = 'editstyle'
+          TabOrder = 9
+          Password = True
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF6D7868
+          Position.X = 360.000000000000000000
+          Position.Y = 400.000000000000000000
+          Size.Width = 180.000000000000000000
+          Size.Height = 36.000000000000000000
+          Size.PlatformDefault = False
+          TextPrompt = 'Senha do PFX'
+          StyledSettings = [Family, Size]
+        end
+        object LabelConfirmacaoSenha: TLabel
+          StyledSettings = []
+          Opacity = 0.800000011920928900
+          Position.X = 544.000000000000000000
+          Position.Y = 376.000000000000000000
+          Size.Width = 137.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.Font.Size = 14.000000000000000000
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF1F281D
+          Text = 'Confirmar senha'
+        end
+        object FEditConfirmacaoSenha: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          StyleLookup = 'editstyle'
+          TabOrder = 10
+          Password = True
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF6D7868
+          Position.X = 544.000000000000000000
+          Position.Y = 400.000000000000000000
+          Size.Width = 180.000000000000000000
+          Size.Height = 36.000000000000000000
+          Size.PlatformDefault = False
+          TextPrompt = 'Repetir a senha do PFX'
+          StyledSettings = [Family, Size]
+        end
+      end
+    end
+  end
+end

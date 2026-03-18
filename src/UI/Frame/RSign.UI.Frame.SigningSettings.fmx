@@ -1,0 +1,158 @@
+object RSignFrameSigningSettings: TRSignFrameSigningSettings
+  Size.Width = 900.000000000000000000
+  Size.Height = 550.000000000000000000
+  Size.PlatformDefault = False
+  object FScrollBox: TVertScrollBox
+    Align = Client
+    Padding.Left = 12.000000000000000000
+    Padding.Top = 12.000000000000000000
+    Padding.Right = 12.000000000000000000
+    Padding.Bottom = 12.000000000000000000
+    Size.Width = 900.000000000000000000
+    Size.Height = 550.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    Viewport.Width = 900.000000000000000000
+    Viewport.Height = 550.000000000000000000
+    object FContainer: TLayout
+      Align = Center
+      Size.Width = 740.000000000000000000
+      Size.Height = 450.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object FPanelBackground: TRectangle
+        Align = Contents
+        Fill.Color = xFFD2D8CE
+        Size.Width = 740.000000000000000000
+        Size.Height = 450.000000000000000000
+        Size.PlatformDefault = False
+        XRadius = 6.000000000000000000
+        YRadius = 6.000000000000000000
+        object FCheckLocalizarAutomaticamente: TCheckBox
+          StyledSettings = [Family, Size, Style]
+          Position.X = 16.000000000000000000
+          Position.Y = 16.000000000000000000
+          Size.Width = 760.000000000000000000
+          Size.Height = 30.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 0
+          Text = 'Localizar automaticamente o signtool.exe'
+          TextSettings.FontColor = xFF1F281D
+        end
+        object LabelCaminhoSignTool: TLabel
+          StyledSettings = []
+          Opacity = 0.800000011920928900
+          Position.X = 16.000000000000000000
+          Position.Y = 60.000000000000000000
+          Size.Width = 280.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.Font.Size = 14.000000000000000000
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF1F281D
+          Text = 'Caminho manual do signtool.exe'
+        end
+        object FEditCaminhoManualSignTool: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          StyleLookup = 'EditStyle'
+          TabOrder = 1
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF6D7868
+          Position.X = 16.000000000000000000
+          Position.Y = 84.000000000000000000
+          Size.Width = 710.000000000000000000
+          Size.Height = 36.000000000000000000
+          Size.PlatformDefault = False
+          TextPrompt = 'Ex.: C:\Program Files (x86)\Windows Kits\10\bin\...\signtool.exe'
+          StyledSettings = [Family, Size]
+        end
+        object FCheckUsarVersaoMaisNova: TCheckBox
+          StyledSettings = [Family, Size, Style]
+          Position.X = 16.000000000000000000
+          Position.Y = 132.000000000000000000
+          Size.Width = 760.000000000000000000
+          Size.Height = 30.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 2
+          Text = 'Usar automaticamente a vers'#227'o mais nova encontrada'
+          TextSettings.FontColor = xFF1F281D
+        end
+        object LabelTimestamp: TLabel
+          StyledSettings = []
+          Opacity = 0.800000011920928900
+          Position.X = 16.000000000000000000
+          Position.Y = 176.000000000000000000
+          Size.Width = 280.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.Font.Size = 14.000000000000000000
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF1F281D
+          Text = 'URL do timestamp'
+        end
+        object FEditUrlTimestamp: TEdit
+          Touch.InteractiveGestures = [LongTap, DoubleTap]
+          StyleLookup = 'EditStyle'
+          TabOrder = 3
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF6D7868
+          Position.X = 16.000000000000000000
+          Position.Y = 200.000000000000000000
+          Size.Width = 710.000000000000000000
+          Size.Height = 36.000000000000000000
+          Size.PlatformDefault = False
+          TextPrompt = 'Ex.: http://timestamp.digicert.com'
+          StyledSettings = [Family, Size]
+        end
+        object FCheckVerificarAoFinal: TCheckBox
+          StyledSettings = [Family, Size, Style]
+          Position.X = 16.000000000000000000
+          Position.Y = 248.000000000000000000
+          Size.Width = 760.000000000000000000
+          Size.Height = 30.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 4
+          Text = 'Verificar a assinatura ao final da opera'#231#227'o'
+          TextSettings.FontColor = xFF1F281D
+        end
+        object FCheckPermitirSemTimestamp: TCheckBox
+          StyledSettings = [Family, Size, Style]
+          Position.X = 16.000000000000000000
+          Position.Y = 292.000000000000000000
+          Size.Width = 760.000000000000000000
+          Size.Height = 30.000000000000000000
+          Size.PlatformDefault = False
+          TabOrder = 5
+          Text = 'Permitir continuar sem timestamp ap'#243's confirma'#231#227'o do usu'#225'rio'
+          TextSettings.FontColor = xFF1F281D
+        end
+        object LabelModoOperacao: TLabel
+          StyledSettings = []
+          Opacity = 0.800000011920928900
+          Position.X = 16.000000000000000000
+          Position.Y = 336.000000000000000000
+          Size.Width = 280.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.Font.Size = 14.000000000000000000
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF1F281D
+          Text = 'Modo de opera'#231#227'o'
+        end
+        object LabelModoLog: TLabel
+          StyledSettings = []
+          Opacity = 0.800000011920928900
+          Position.X = 376.000000000000000000
+          Position.Y = 336.000000000000000000
+          Size.Width = 280.000000000000000000
+          Size.Height = 22.000000000000000000
+          Size.PlatformDefault = False
+          TextSettings.Font.Size = 14.000000000000000000
+          TextSettings.Font.StyleExt = {00060000000000000004000000}
+          TextSettings.FontColor = xFF1F281D
+          Text = 'Modo de sa'#237'da do log'
+        end
+      end
+    end
+  end
+end

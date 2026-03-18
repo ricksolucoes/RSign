@@ -1,0 +1,41 @@
+object Form1: TForm1
+  Left = 0
+  Top = 0
+  Caption = 'Custom ComboBox - Demo'
+  ClientHeight = 480
+  ClientWidth = 640
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  PixelsPerInch = 96
+  TextHeight = 13
+  object RectBackground: TRectangle
+    Align = Client
+    Fill.Color = xFF1A252F
+    Stroke.Kind = None
+    Height = 480.0
+    Width = 640.0
+  end
+  object LabelResult: TLabel
+    Position.X = 40.0
+    Position.Y = 280.0
+    Width = 560.0
+    Height = 30.0
+    Text = 'Nenhum item selecionado'
+    TextSettings.FontColor = xFF8899AA
+    TextSettings.Font.Size = 13
+    TextSettings.HorzAlign = Center
+  end
+  object LabelTitle: TLabel
+    Position.X = 40.0
+    Position.Y = 40.0
+    Width = 560.0
+    Height = 40.0
+    Text = 'Custom ComboBox FMX'
+    TextSettings.FontColor = xFFFFFFFF
+    TextSettings.Font.Size = 20
+    TextSettings.Font.Style = [Bold]
+    TextSettings.HorzAlign = Center
+  end
+end

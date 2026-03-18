@@ -1,0 +1,70 @@
+==============================================
+  CUSTOM COMBOBOX FMX — Delphi 10.2+
+==============================================
+
+ARQUIVOS INCLUSOS:
+------------------
+  CustomComboBox.pas  → Componente TMyComboBox
+  MainForm.pas        → Formulario principal com 3 exemplos
+  MainForm.fmx        → Arquivo de form do FMX
+
+COMO USAR NO SEU PROJETO:
+--------------------------
+1. Crie um novo projeto FMX (File → New → FireMonkey Desktop Application)
+
+2. Adicione o arquivo CustomComboBox.pas ao projeto
+   (Project → Add to Project)
+
+3. Copie o conteudo de MainForm.pas e MainForm.fmx para o seu form
+
+4. Adicione "CustomComboBox" na clausula "uses" do seu form
+
+5. Compile e execute!
+
+
+EXEMPLO MINIMO DE USO:
+-----------------------
+
+  uses CustomComboBox;
+
+  var CB: TMyComboBox;
+
+  CB := TMyComboBox.Create(Self);
+  CB.Parent := Self;
+  CB.SetBounds(40, 100, 260, 42);
+
+  CB.AddItem('Item 1');
+  CB.AddItem('Item 2');
+  CB.AddItem('Item 3');
+
+  CB.OnChange := procedure(Sender: TObject)
+  begin
+    ShowMessage(CB.SelectedText);
+  end;
+
+
+PROPRIEDADES DE CUSTOMIZACAO:
+------------------------------
+  BGColor      → Cor de fundo        (ex: $FF2C3E50)
+  BorderColor  → Cor da borda        (ex: $FF3498DB)
+  FontColor    → Cor do texto/seta   (ex: $FFFFFFFF)
+  HintText     → Texto de placeholder
+
+
+METODOS:
+---------
+  AddItem(texto)    → Adiciona um item
+  Clear             → Limpa todos os itens
+  SelectedText      → Retorna o texto selecionado
+  SelectedIndex     → Retorna o indice selecionado
+
+
+CORES SUGERIDAS:
+-----------------
+  Azul (padrao):  BG=$FF2C3E50  Border=$FF3498DB
+  Verde:          BG=$FF1E3A2F  Border=$FF2ECC71
+  Vermelho:       BG=$FF3A1E1E  Border=$FFE74C3C
+  Roxo:           BG=$FF2E1E3A  Border=$FF9B59B6
+  Laranja:        BG=$FF3A2A1E  Border=$FFE67E22
+
+==============================================
