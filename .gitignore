@@ -80,3 +80,7 @@ __recovery/
 
 # Boss dependency manager vendor folder https://github.com/HashLoad/boss
 modules/
+
+# If you have some custom folders for your project, you can ignore them here.
+APP/
+
