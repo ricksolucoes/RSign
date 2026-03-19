@@ -195,6 +195,8 @@
         <DCCReference Include="src\Utils\CustomComboBox\RSign.Utils.Custom.ComboBox.pas"/>
         <DCCReference Include="src\Services\RSign.Services.ProcessExecutor.pas"/>
         <DCCReference Include="src\Services\RSign.Services.SignTool.pas"/>
+        <DCCReference Include="src\Services\RSign.Services.Certificate.pas"/>
+        <DCCReference Include="src\Services\RSign.Services.UserDecision.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

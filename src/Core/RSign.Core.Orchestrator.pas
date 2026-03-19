@@ -5,35 +5,42 @@ interface
 uses
   System.SysUtils,
   RSign.Core.Interfaces,
+
   RSign.Types.Common,
   RSign.Types.Config,
   RSign.Types.Signing,
-  RSign.Services.ProcessExecutor,
-  RSign.Services.SignTool;
+  RSign.Types.Certificate,
+
+  RSign.Services.SignTool,
+  RSign.Services.Certificate,
+  RSign.Services.ProcessExecutor;
 
 type
   TOrchestrator = class(TInterfacedObject, IOrchestrator)
   private
     FConfigManager: IConfigManager;
     FLogger: ILoggerService;
+    FUserDecisionService: IUserDecisionService;
   protected
-    constructor Create(const AConfigManager: IConfigManager; const ALogger: ILoggerService);
+    constructor Create(const AConfigManager: IConfigManager; const ALogger: ILoggerService; const AUserDecisionService: IUserDecisionService);
+
     procedure Initialize;
     function LoadConfiguration: TConfiguracaoAplicacao;
     procedure SaveConfiguration(const AConfiguracao: TConfiguracaoAplicacao);
     procedure ValidateConfiguration(const AConfiguracao: TConfiguracaoAplicacao);
     procedure Execute(const AConfiguracao: TConfiguracaoAplicacao);
   public
-    class function New(const AConfigManager: IConfigManager; const ALogger: ILoggerService) : IOrchestrator;
+    class function New(const AConfigManager: IConfigManager; const ALogger: ILoggerService; const AUserDecisionService: IUserDecisionService) : IOrchestrator;
   end;
 
 implementation
 
-constructor TOrchestrator.Create(const AConfigManager: IConfigManager; const ALogger: ILoggerService);
+constructor TOrchestrator.Create(const AConfigManager: IConfigManager; const ALogger: ILoggerService; const AUserDecisionService: IUserDecisionService);
 begin
   inherited Create;
   FConfigManager := AConfigManager;
   FLogger := ALogger;
+  FUserDecisionService := AUserDecisionService;
 end;
 
 procedure TOrchestrator.Initialize;
@@ -53,10 +60,9 @@ begin
   FLogger.Info('Orchestrator', 'Configuração carregada do arquivo .ini.');
 end;
 
-class function TOrchestrator.New(const AConfigManager: IConfigManager;
-  const ALogger: ILoggerService): IOrchestrator;
+class function TOrchestrator.New(const AConfigManager: IConfigManager; const ALogger: ILoggerService; const AUserDecisionService: IUserDecisionService) : IOrchestrator;
 begin
-  Result := Self.Create(AConfigManager, ALogger);
+  Result := Self.Create(AConfigManager, ALogger, AUserDecisionService);
 end;
 
 procedure TOrchestrator.SaveConfiguration(const AConfiguracao: TConfiguracaoAplicacao);
@@ -89,6 +95,9 @@ var
   LDiretorioTrabalho: string;
   LSignToolService: ISignToolService;
   LStatusSignTool: TStatusSignTool;
+  LCertificateService: ICertificateService;
+  LStatusCertificado: TStatusCertificado;
+  LResultadoCriacaoCertificado: TResultadoCriacaoCertificado;
 begin
   ValidateConfiguration(AConfiguracao);
 
@@ -141,6 +150,88 @@ begin
 
   if Trim(LStatusSignTool.CaminhoFinal) <> '' then
     FLogger.Debug('Orchestrator', 'Caminho selecionado: ' + LStatusSignTool.CaminhoFinal);
+
+  FLogger.Info('Orchestrator', 'Iniciando o teste operacional do Certificate.');
+
+  LCertificateService := TCertificateService.New(FLogger, LProcessExecutor);
+  LStatusCertificado := LCertificateService.Validar(AConfiguracao.Certificado, AConfiguracao.Caminhos);
+
+  if not LStatusCertificado.ArquivoExiste then
+  begin
+    FLogger.Warning('Orchestrator', 'O certificado configurado ainda não foi encontrado.', LStatusCertificado.MensagemTecnica);
+
+    if not Assigned(FUserDecisionService) then
+    begin
+      FLogger.Warning('Orchestrator', 'Não há serviço de decisão do usuário configurado para confirmar a criação do certificado.');
+      Exit;
+    end;
+
+    if not FUserDecisionService.Confirmar(
+      'Certificado não encontrado',
+      'O certificado configurado não foi localizado no caminho informado.' + sLineBreak +
+      'Deseja gerar um novo certificado agora?',
+      LStatusCertificado.MensagemTecnica
+    ) then
+    begin
+      FLogger.Warning('Orchestrator', 'O usuário optou por não gerar um novo certificado.');
+      Exit;
+    end;
+
+    FLogger.Info('Orchestrator', 'O usuário confirmou a criação de um novo certificado.');
+
+    LResultadoCriacaoCertificado := LCertificateService.Criar(AConfiguracao.Certificado, AConfiguracao.Caminhos);
+
+    if not LResultadoCriacaoCertificado.Sucesso then
+    begin
+      FLogger.Error('Orchestrator', 'Falha ao criar o certificado.', LResultadoCriacaoCertificado.MensagemErro);
+      raise Exception.Create('Falha ao criar o certificado. Verifique o log para detalhes.');
+    end;
+
+    FLogger.Success('Orchestrator', 'Novo certificado gerado com sucesso.');
+
+    if Trim(LResultadoCriacaoCertificado.CaminhoPfxGerado) <> '' then
+      FLogger.Debug('Orchestrator', 'Caminho do PFX gerado: ' + LResultadoCriacaoCertificado.CaminhoPfxGerado);
+
+    if Trim(LResultadoCriacaoCertificado.Thumbprint) <> '' then
+      FLogger.Debug('Orchestrator', 'Thumbprint do certificado gerado: ' + LResultadoCriacaoCertificado.Thumbprint);
+
+    LStatusCertificado := LCertificateService.Validar(AConfiguracao.Certificado, AConfiguracao.Caminhos);
+  end;
+
+  if not LStatusCertificado.SenhaValida then
+  begin
+    FLogger.Error('Orchestrator', 'A validação do certificado falhou por senha inválida.', LStatusCertificado.MensagemTecnica);
+    raise Exception.Create('Falha na validação do certificado. Verifique o log para detalhes.');
+  end;
+
+  if not LStatusCertificado.CertificadoIntegro then
+  begin
+    FLogger.Error('Orchestrator', 'A validação do certificado falhou porque o PFX está inválido.', LStatusCertificado.MensagemTecnica);
+    raise Exception.Create('Falha na validação do certificado. Verifique o log para detalhes.');
+  end;
+
+  if not LStatusCertificado.PossuiChavePrivada then
+  begin
+    FLogger.Error('Orchestrator', 'O certificado não possui chave privada utilizável.', LStatusCertificado.MensagemTecnica);
+    raise Exception.Create('Falha na validação do certificado. Verifique o log para detalhes.');
+  end;
+
+  if not LStatusCertificado.CompativelComAssinatura then
+  begin
+    FLogger.Error('Orchestrator', 'O certificado não é compatível com assinatura de código.', LStatusCertificado.MensagemTecnica);
+    raise Exception.Create('Falha na validação do certificado. Verifique o log para detalhes.');
+  end;
+
+  if LStatusCertificado.Vencido then
+  begin
+    FLogger.Error('Orchestrator', 'O certificado está vencido.', LStatusCertificado.MensagemTecnica);
+    raise Exception.Create('Falha na validação do certificado. Verifique o log para detalhes.');
+  end;
+
+  if LStatusCertificado.ProximoDoVencimento then
+    FLogger.Warning('Orchestrator', 'O certificado está próximo do vencimento.', LStatusCertificado.MensagemTecnica)
+  else
+    FLogger.Success('Orchestrator', 'Teste operacional do Certificate concluído com sucesso.');
 end;
 
 end.

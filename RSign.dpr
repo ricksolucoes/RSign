@@ -21,7 +21,9 @@ uses
   RSign.App.Main in 'src\App\RSign.App.Main.pas',
   RSign.Utils.Custom.ComboBox in 'src\Utils\CustomComboBox\RSign.Utils.Custom.ComboBox.pas',
   RSign.Services.ProcessExecutor in 'src\Services\RSign.Services.ProcessExecutor.pas',
-  RSign.Services.SignTool in 'src\Services\RSign.Services.SignTool.pas';
+  RSign.Services.SignTool in 'src\Services\RSign.Services.SignTool.pas',
+  RSign.Services.Certificate in 'src\Services\RSign.Services.Certificate.pas',
+  RSign.Services.UserDecision in 'src\Services\RSign.Services.UserDecision.pas';
 
 {$R *.res}
 
