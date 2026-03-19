@@ -33,6 +33,7 @@ type
     FEditUrlTimestamp: TEdit;
     FCheckVerificarAoFinal: TCheckBox;
     FCheckPermitirSemTimestamp: TCheckBox;
+    procedure FCheckLocalizarAutomaticamenteChange(Sender: TObject);
   private
     FComboModoOperacao  : TRSignCustomComboBox;
     FComboModoLog       : TRSignCustomComboBox;
@@ -65,6 +66,8 @@ begin
   FEditUrlTimestamp.Text := AConfiguracao.UrlTimestamp;
   FCheckVerificarAoFinal.IsChecked := AConfiguracao.VerificarAssinaturaAoFinal;
   FCheckPermitirSemTimestamp.IsChecked := AConfiguracao.PermitirContinuarSemTimestamp;
+  FEditCaminhoManualSignTool.Enabled := not FCheckLocalizarAutomaticamente.IsChecked;
+  FCheckUsarVersaoMaisNova.Enabled := FCheckLocalizarAutomaticamente.IsChecked;
 
   case AConfiguracao.ModoOperacaoArquivos of
     TModoOperacaoArquivos.Unico:
@@ -156,6 +159,18 @@ begin
 
   FComboModoOperacao.AddItem('Arquivo único');      // indice 0 → TModoOperacaoArquivos.Unico
   FComboModoOperacao.AddItem('Lote');               // indice 1 → TModoOperacaoArquivos.Lote
+end;
+
+procedure TRSignFrameSigningSettings.FCheckLocalizarAutomaticamenteChange(
+  Sender: TObject);
+begin
+  FEditCaminhoManualSignTool.Enabled := not TCheckBox(Sender).IsChecked;
+  FCheckUsarVersaoMaisNova.Enabled := TCheckBox(Sender).IsChecked;
+  TThread.ForceQueue(nil, procedure
+  begin
+    if FEditCaminhoManualSignTool.CanFocus then
+      FEditCaminhoManualSignTool.SetFocus;
+  end);
 end;
 
 end.

@@ -20,6 +20,10 @@ var
   LLogger: ILoggerService;
   LOrchestrator: IOrchestrator;
 begin
+{$IFDEF DEBUG}
+  ReportMemoryLeaksOnShutdown := True;
+{$ENDIF}
+
   Application.Initialize;
 
   LConfigManager := TConfigManager.New;

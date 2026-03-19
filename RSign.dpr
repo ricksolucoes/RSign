@@ -19,7 +19,9 @@ uses
   RSign.App.Configuracao in 'src\App\RSign.App.Configuracao.pas',
   RSign.App.Log in 'src\App\RSign.App.Log.pas',
   RSign.App.Main in 'src\App\RSign.App.Main.pas',
-  RSign.Utils.Custom.ComboBox in 'src\Utils\CustomComboBox\RSign.Utils.Custom.ComboBox.pas';
+  RSign.Utils.Custom.ComboBox in 'src\Utils\CustomComboBox\RSign.Utils.Custom.ComboBox.pas',
+  RSign.Services.ProcessExecutor in 'src\Services\RSign.Services.ProcessExecutor.pas',
+  RSign.Services.SignTool in 'src\Services\RSign.Services.SignTool.pas';
 
 {$R *.res}
 

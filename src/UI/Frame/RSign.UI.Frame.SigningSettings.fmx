@@ -38,10 +38,11 @@ object RSignFrameSigningSettings: TRSignFrameSigningSettings
           TabOrder = 0
           Text = 'Localizar automaticamente o signtool.exe'
           TextSettings.FontColor = xFF1F281D
+          OnChange = FCheckLocalizarAutomaticamenteChange
         end
         object LabelCaminhoSignTool: TLabel
           StyledSettings = []
-          Opacity = 0.800000011920928900
+          Opacity = 0.800000011920929000
           Position.X = 16.000000000000000000
           Position.Y = 60.000000000000000000
           Size.Width = 280.000000000000000000
@@ -79,7 +80,7 @@ object RSignFrameSigningSettings: TRSignFrameSigningSettings
         end
         object LabelTimestamp: TLabel
           StyledSettings = []
-          Opacity = 0.800000011920928900
+          Opacity = 0.800000011920929000
           Position.X = 16.000000000000000000
           Position.Y = 176.000000000000000000
           Size.Width = 280.000000000000000000
@@ -128,7 +129,7 @@ object RSignFrameSigningSettings: TRSignFrameSigningSettings
         end
         object LabelModoOperacao: TLabel
           StyledSettings = []
-          Opacity = 0.800000011920928900
+          Opacity = 0.800000011920929000
           Position.X = 16.000000000000000000
           Position.Y = 336.000000000000000000
           Size.Width = 280.000000000000000000
@@ -141,7 +142,7 @@ object RSignFrameSigningSettings: TRSignFrameSigningSettings
         end
         object LabelModoLog: TLabel
           StyledSettings = []
-          Opacity = 0.800000011920928900
+          Opacity = 0.800000011920929000
           Position.X = 376.000000000000000000
           Position.Y = 336.000000000000000000
           Size.Width = 280.000000000000000000

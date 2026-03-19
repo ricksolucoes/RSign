@@ -5,7 +5,11 @@ interface
 uses
   System.SysUtils,
   RSign.Core.Interfaces,
-  RSign.Types.Config;
+  RSign.Types.Common,
+  RSign.Types.Config,
+  RSign.Types.Signing,
+  RSign.Services.ProcessExecutor,
+  RSign.Services.SignTool;
 
 type
   TOrchestrator = class(TInterfacedObject, IOrchestrator)
@@ -77,9 +81,67 @@ begin
 end;
 
 procedure TOrchestrator.Execute(const AConfiguracao: TConfiguracaoAplicacao);
+var
+  LProcessExecutor: IProcessExecutor;
+  LResultadoProcesso: TResultadoProcessoExterno;
+  LCaminhoExecutavel: string;
+  LParametros: string;
+  LDiretorioTrabalho: string;
+  LSignToolService: ISignToolService;
+  LStatusSignTool: TStatusSignTool;
 begin
   ValidateConfiguration(AConfiguracao);
-  FLogger.Warning('Orchestrator', 'Execução operacional ainda não implementada nesta fase.', 'Nesta entrega foi criada a base do projeto com telas, frames e arquivo de configuração.');
+
+  LProcessExecutor := TProcessExecutorService.New(FLogger);
+  LCaminhoExecutavel := Trim(GetEnvironmentVariable('ComSpec'));
+
+  if LCaminhoExecutavel = '' then
+    LCaminhoExecutavel := 'cmd.exe';
+
+  LParametros := '/C echo RSign ProcessExecutor OK';
+  LDiretorioTrabalho := ExcludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0)));
+
+  FLogger.Info('Orchestrator', 'Iniciando o teste operacional do ProcessExecutor.');
+  LResultadoProcesso := LProcessExecutor.Execute(LCaminhoExecutavel, LParametros, LDiretorioTrabalho, 5000);
+
+  if not LResultadoProcesso.Sucesso then
+  begin
+    FLogger.Error(
+      'Orchestrator',
+      'Falha no teste operacional do ProcessExecutor.',
+      'Código: ' + IntToStr(LResultadoProcesso.CodigoSaida) +
+      ' | Comando: ' + LResultadoProcesso.ComandoExecutado +
+      ' | STDERR: ' + LResultadoProcesso.ErroPadrao
+    );
+
+    raise Exception.Create('Falha no teste operacional do ProcessExecutor. Verifique o log para detalhes.');
+  end;
+
+  FLogger.Success('Orchestrator', 'Teste operacional do ProcessExecutor concluído com sucesso.');
+
+  if Trim(LResultadoProcesso.SaidaPadrao) <> '' then
+    FLogger.Debug('Orchestrator', 'Saída do teste: ' + LResultadoProcesso.SaidaPadrao);
+
+  FLogger.Info('Orchestrator', 'Iniciando o teste operacional do SignTool.');
+
+  LSignToolService := TSignToolService.New(FLogger, LProcessExecutor);
+  LStatusSignTool := LSignToolService.Localizar(AConfiguracao.Assinatura);
+
+  if not LStatusSignTool.Encontrado then
+  begin
+    FLogger.Error('Orchestrator', 'Falha no teste operacional do SignTool.', LStatusSignTool.MensagemTecnica);
+    raise Exception.Create('Falha no teste operacional do SignTool. Verifique o log para detalhes.');
+  end;
+
+  FLogger.Success('Orchestrator', 'Teste operacional do SignTool concluído com sucesso.');
+  FLogger.Debug('Orchestrator', 'Origem selecionada: ' + LStatusSignTool.Origem.ToString);
+
+  if Trim(LStatusSignTool.VersaoDetectada) <> '' then
+    FLogger.Debug('Orchestrator', 'Versão detectada: ' + LStatusSignTool.VersaoDetectada);
+
+  if Trim(LStatusSignTool.CaminhoFinal) <> '' then
+    FLogger.Debug('Orchestrator', 'Caminho selecionado: ' + LStatusSignTool.CaminhoFinal);
 end;
 
 end.
+

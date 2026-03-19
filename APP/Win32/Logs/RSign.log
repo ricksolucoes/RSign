@@ -1,0 +1,31 @@
+﻿2026-03-19 10:50:59 [Success] Orchestrator - Inicialização da aplicação concluída.
+2026-03-19 10:50:59 [Info] Orchestrator - Configuração carregada do arquivo .ini.
+2026-03-19 10:51:02 [Info] Orchestrator - Validação inicial da configuração concluída.
+2026-03-19 10:51:02 [Info] Orchestrator - Iniciando o teste operacional do ProcessExecutor.
+2026-03-19 10:51:02 [Debug] ProcessExecutor - Executando comando: "C:\Windows\system32\cmd.exe" /C echo RSign ProcessExecutor OK
+2026-03-19 10:51:02 [Success] ProcessExecutor - Processo executado com sucesso.
+2026-03-19 10:51:02 [Debug] ProcessExecutor - STDOUT: RSign ProcessExecutor OK
+2026-03-19 10:51:02 [Success] Orchestrator - Teste operacional do ProcessExecutor concluído com sucesso.
+2026-03-19 10:51:02 [Debug] Orchestrator - Saída do teste: RSign ProcessExecutor OK
+2026-03-19 10:51:02 [Info] Orchestrator - Iniciando o teste operacional do SignTool.
+2026-03-19 10:51:02 [Debug] SignTool - Iniciando a localização automática do SignTool.
+2026-03-19 10:51:02 [Debug] SignTool - Candidato ignorado por arquitetura incompatível com o host: C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\arm\signtool.exe
+2026-03-19 10:51:02 [Debug] SignTool - Candidato ignorado por arquitetura incompatível com o host: C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\arm64\signtool.exe
+2026-03-19 10:51:02 [Debug] ProcessExecutor - Executando comando: "C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\x64\signtool.exe" /?
+2026-03-19 10:51:02 [Success] ProcessExecutor - Processo executado com sucesso.
+2026-03-19 10:51:02 [Debug] ProcessExecutor - STDERR: Usage: signtool <command> [options]
+
+  Valid commands:
+    sign       --  Sign files using an embedded signature.
+    timestamp  --  Timestamp previously-signed files.
+    verify     --  Verify embedded or catalog signatures.
+    catdb      --  Modify a catalog database.
+    remove     --  Remove embedded signature(s) or reduce the size of an
+                   embedded signed file.
+
+For help on a specific command, enter "signtool <command> /?"
+2026-03-19 10:51:02 [Success] SignTool - SignTool localizado com sucesso.
+2026-03-19 10:51:02 [Success] Orchestrator - Teste operacional do SignTool concluído com sucesso.
+2026-03-19 10:51:02 [Debug] Orchestrator - Origem selecionada: Automatico
+2026-03-19 10:51:02 [Debug] Orchestrator - Versão detectada: 10.0.19041.5609
+2026-03-19 10:51:02 [Debug] Orchestrator - Caminho selecionado: C:\Program Files (x86)\Windows Kits\10\bin\10.0.19041.0\x64\signtool.exe
