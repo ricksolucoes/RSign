@@ -46,6 +46,8 @@ type
     procedure AfterConstruction; override;
     procedure ApplyConfiguration(const AConfiguracao: TConfiguracaoAssinatura);
     function BuildConfiguration: TConfiguracaoAssinatura;
+
+    property ComboModoOperacao: TRSignCustomComboBox read FComboModoOperacao write FComboModoOperacao;
   end;
 
 implementation

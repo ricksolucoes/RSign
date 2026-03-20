@@ -23,7 +23,9 @@ uses
   RSign.Services.ProcessExecutor in 'src\Services\RSign.Services.ProcessExecutor.pas',
   RSign.Services.SignTool in 'src\Services\RSign.Services.SignTool.pas',
   RSign.Services.Certificate in 'src\Services\RSign.Services.Certificate.pas',
-  RSign.Services.UserDecision in 'src\Services\RSign.Services.UserDecision.pas';
+  RSign.Services.UserDecision in 'src\Services\RSign.Services.UserDecision.pas',
+  RSign.Services.FileSigning in 'src\Services\RSign.Services.FileSigning.pas',
+  RSign.Services.Signing in 'src\Services\RSign.Services.Signing.pas';
 
 {$R *.res}
 

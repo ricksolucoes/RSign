@@ -32,7 +32,7 @@ object RSignFrameCertificateProfile: TRSignFrameCertificateProfile
         object LabelTipoCertificado: TLabel
           StyledSettings = []
           Opacity = 0.800000011920928900
-          Position.X = 16.000000000000000000
+          Position.X = 20.000000000000000000
           Position.Y = 16.000000000000000000
           Size.Width = 250.000000000000000000
           Size.Height = 22.000000000000000000
@@ -45,7 +45,7 @@ object RSignFrameCertificateProfile: TRSignFrameCertificateProfile
         object LabelNomeCertificado: TLabel
           StyledSettings = []
           Opacity = 0.800000011920928900
-          Position.X = 16.000000000000000000
+          Position.X = 20.000000000000000000
           Position.Y = 88.000000000000000000
           Size.Width = 250.000000000000000000
           Size.Height = 22.000000000000000000
@@ -72,7 +72,7 @@ object RSignFrameCertificateProfile: TRSignFrameCertificateProfile
         object LabelNomeEmpresa: TLabel
           StyledSettings = []
           Opacity = 0.800000011920928900
-          Position.X = 16.000000000000000000
+          Position.X = 20.000000000000000000
           Position.Y = 160.000000000000000000
           Size.Width = 250.000000000000000000
           Size.Height = 22.000000000000000000
@@ -99,7 +99,7 @@ object RSignFrameCertificateProfile: TRSignFrameCertificateProfile
         object LabelOrganizacao: TLabel
           StyledSettings = []
           Opacity = 0.800000011920928900
-          Position.X = 16.000000000000000000
+          Position.X = 20.000000000000000000
           Position.Y = 232.000000000000000000
           Size.Width = 250.000000000000000000
           Size.Height = 22.000000000000000000
@@ -126,9 +126,9 @@ object RSignFrameCertificateProfile: TRSignFrameCertificateProfile
         object LabelDepartamento: TLabel
           StyledSettings = []
           Opacity = 0.800000011920928900
-          Position.X = 16.000000000000000000
+          Position.X = 20.000000000000000000
           Position.Y = 304.000000000000000000
-          Size.Width = 250.000000000000000000
+          Size.Width = 181.000000000000000000
           Size.Height = 22.000000000000000000
           Size.PlatformDefault = False
           TextSettings.Font.Size = 14.000000000000000000
@@ -153,9 +153,9 @@ object RSignFrameCertificateProfile: TRSignFrameCertificateProfile
         object LabelCidade: TLabel
           StyledSettings = []
           Opacity = 0.800000011920928900
-          Position.X = 224.000000000000000000
+          Position.X = 228.000000000000000000
           Position.Y = 304.000000000000000000
-          Size.Width = 169.000000000000000000
+          Size.Width = 121.000000000000000000
           Size.Height = 22.000000000000000000
           Size.PlatformDefault = False
           TextSettings.Font.Size = 14.000000000000000000
@@ -180,7 +180,7 @@ object RSignFrameCertificateProfile: TRSignFrameCertificateProfile
         object LabelEstado: TLabel
           StyledSettings = []
           Opacity = 0.800000011920928900
-          Position.X = 416.000000000000000000
+          Position.X = 420.000000000000000000
           Position.Y = 304.000000000000000000
           Size.Width = 49.000000000000000000
           Size.Height = 22.000000000000000000
@@ -207,7 +207,7 @@ object RSignFrameCertificateProfile: TRSignFrameCertificateProfile
         object LabelPais: TLabel
           StyledSettings = []
           Opacity = 0.800000011920928900
-          Position.X = 536.000000000000000000
+          Position.X = 540.000000000000000000
           Position.Y = 304.000000000000000000
           Size.Width = 113.000000000000000000
           Size.Height = 22.000000000000000000
@@ -234,7 +234,7 @@ object RSignFrameCertificateProfile: TRSignFrameCertificateProfile
         object LabelEmail: TLabel
           StyledSettings = []
           Opacity = 0.800000011920928900
-          Position.X = 16.000000000000000000
+          Position.X = 20.000000000000000000
           Position.Y = 376.000000000000000000
           Size.Width = 113.000000000000000000
           Size.Height = 22.000000000000000000
@@ -261,9 +261,9 @@ object RSignFrameCertificateProfile: TRSignFrameCertificateProfile
         object LabelValidade: TLabel
           StyledSettings = []
           Opacity = 0.800000011920928900
-          Position.X = 232.000000000000000000
+          Position.X = 236.000000000000000000
           Position.Y = 376.000000000000000000
-          Size.Width = 121.000000000000000000
+          Size.Width = 109.000000000000000000
           Size.Height = 22.000000000000000000
           Size.PlatformDefault = False
           TextSettings.Font.Size = 14.000000000000000000
@@ -289,7 +289,7 @@ object RSignFrameCertificateProfile: TRSignFrameCertificateProfile
         object LabelSenha: TLabel
           StyledSettings = []
           Opacity = 0.800000011920928900
-          Position.X = 360.000000000000000000
+          Position.X = 364.000000000000000000
           Position.Y = 376.000000000000000000
           Size.Width = 97.000000000000000000
           Size.Height = 22.000000000000000000
@@ -317,7 +317,7 @@ object RSignFrameCertificateProfile: TRSignFrameCertificateProfile
         object LabelConfirmacaoSenha: TLabel
           StyledSettings = []
           Opacity = 0.800000011920928900
-          Position.X = 544.000000000000000000
+          Position.X = 548.000000000000000000
           Position.Y = 376.000000000000000000
           Size.Width = 137.000000000000000000
           Size.Height = 22.000000000000000000

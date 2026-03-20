@@ -11,8 +11,10 @@ uses
   RSign.Types.Signing,
   RSign.Types.Certificate,
 
+  RSign.Services.Signing,
   RSign.Services.SignTool,
   RSign.Services.Certificate,
+  RSign.Services.FileSigning,
   RSign.Services.ProcessExecutor;
 
 type
@@ -98,6 +100,13 @@ var
   LCertificateService: ICertificateService;
   LStatusCertificado: TStatusCertificado;
   LResultadoCriacaoCertificado: TResultadoCriacaoCertificado;
+  LFileSigningService: IFileSigningService;
+  LItensArquivoAssinatura: TItensArquivoAssinatura;
+  LItemArquivoAssinatura: TItemArquivoAssinatura;
+  LQuantidadeArquivosValidos: Integer;
+  LIdentificacaoArquivo : string;
+  LSigningService: ISigningService;
+  LResultadoAssinatura: TResultadoAssinatura;
 begin
   ValidateConfiguration(AConfiguracao);
 
@@ -232,6 +241,101 @@ begin
     FLogger.Warning('Orchestrator', 'O certificado está próximo do vencimento.', LStatusCertificado.MensagemTecnica)
   else
     FLogger.Success('Orchestrator', 'Teste operacional do Certificate concluído com sucesso.');
+
+  FLogger.Info('Orchestrator', 'Iniciando a preparação dos arquivos para assinatura.');
+
+  LFileSigningService := TFileSigningService.New(FLogger);
+  LItensArquivoAssinatura := LFileSigningService.PrepararArquivos(AConfiguracao);
+  LQuantidadeArquivosValidos := 0;
+
+  for LItemArquivoAssinatura in LItensArquivoAssinatura do
+  begin
+    if LItemArquivoAssinatura.ValidoParaAssinatura then
+    begin
+      Inc(LQuantidadeArquivosValidos);
+
+      FLogger.Success(
+        'Orchestrator',
+        'Arquivo preparado com sucesso: ' + LItemArquivoAssinatura.NomeArquivo
+      );
+
+      FLogger.Debug(
+        'Orchestrator',
+        'Origem: ' + LItemArquivoAssinatura.CaminhoOriginal
+      );
+
+      if Trim(LItemArquivoAssinatura.CaminhoBackupOld) <> '' then
+        FLogger.Debug(
+          'Orchestrator',
+          'Backup _OLD: ' + LItemArquivoAssinatura.CaminhoBackupOld
+        );
+
+      FLogger.Debug(
+        'Orchestrator',
+        'Destino final: ' + LItemArquivoAssinatura.CaminhoArquivoAssinadoFinal
+      );
+    end
+    else
+    begin
+      if Trim(LItemArquivoAssinatura.NomeArquivo) <> '' then
+        LIdentificacaoArquivo := LItemArquivoAssinatura.NomeArquivo
+      else if Trim(LItemArquivoAssinatura.CaminhoOriginal) <> '' then
+        LIdentificacaoArquivo := LItemArquivoAssinatura.CaminhoOriginal
+      else
+        LIdentificacaoArquivo := '[arquivo não informado]';
+
+      FLogger.Warning(
+        'Orchestrator',
+        'Arquivo bloqueado para assinatura: ' + LIdentificacaoArquivo,
+        LItemArquivoAssinatura.MotivoBloqueio
+      );
+    end;
+  end;
+
+  if LQuantidadeArquivosValidos = 0 then
+    raise Exception.Create('Nenhum arquivo válido foi encontrado para assinatura. Verifique o log para detalhes.');
+
+  FLogger.Success(
+    'Orchestrator',
+    'Preparação dos arquivos concluída com sucesso. Total válido: ' + IntToStr(LQuantidadeArquivosValidos)
+  );
+
+  LSigningService := TSigningService.New(FLogger, LProcessExecutor, LSignToolService);
+
+  for LItemArquivoAssinatura in LItensArquivoAssinatura do
+  begin
+    if not LItemArquivoAssinatura.ValidoParaAssinatura then
+      Continue;
+
+    FLogger.Info('Orchestrator', 'Iniciando a assinatura real do arquivo: ' + LItemArquivoAssinatura.NomeArquivo);
+
+    LResultadoAssinatura := LSigningService.Assinar(AConfiguracao, LItemArquivoAssinatura);
+
+    if not LResultadoAssinatura.Sucesso then
+    begin
+      FLogger.Error(
+        'Orchestrator',
+        'Falha na assinatura real do arquivo: ' + LItemArquivoAssinatura.NomeArquivo,
+        LResultadoAssinatura.MensagemTecnica
+      );
+
+      if Trim(LResultadoAssinatura.MensagemAmigavel) <> '' then
+        raise Exception.Create(LResultadoAssinatura.MensagemAmigavel);
+
+      raise Exception.Create('Falha na assinatura real. Verifique o log para detalhes.');
+    end;
+
+    FLogger.Success(
+      'Orchestrator',
+      'Arquivo assinado com sucesso: ' + LItemArquivoAssinatura.NomeArquivo
+    );
+
+    if Trim(LResultadoAssinatura.ArquivoAlvo) <> '' then
+      FLogger.Debug('Orchestrator', 'Arquivo assinado final: ' + LResultadoAssinatura.ArquivoAlvo);
+
+    if Trim(LResultadoAssinatura.ComandoExecutado) <> '' then
+      FLogger.Debug('Orchestrator', 'Comando executado: ' + LResultadoAssinatura.ComandoExecutado);
+  end;
 end;
 
 end.

@@ -30,7 +30,7 @@ object RSignFrameSigningSettings: TRSignFrameSigningSettings
         YRadius = 6.000000000000000000
         object FCheckLocalizarAutomaticamente: TCheckBox
           StyledSettings = [Family, Size, Style]
-          Position.X = 16.000000000000000000
+          Position.X = 20.000000000000000000
           Position.Y = 16.000000000000000000
           Size.Width = 760.000000000000000000
           Size.Height = 30.000000000000000000
@@ -42,8 +42,8 @@ object RSignFrameSigningSettings: TRSignFrameSigningSettings
         end
         object LabelCaminhoSignTool: TLabel
           StyledSettings = []
-          Opacity = 0.800000011920929000
-          Position.X = 16.000000000000000000
+          Opacity = 0.800000011920928900
+          Position.X = 20.000000000000000000
           Position.Y = 60.000000000000000000
           Size.Width = 280.000000000000000000
           Size.Height = 22.000000000000000000
@@ -69,7 +69,7 @@ object RSignFrameSigningSettings: TRSignFrameSigningSettings
         end
         object FCheckUsarVersaoMaisNova: TCheckBox
           StyledSettings = [Family, Size, Style]
-          Position.X = 16.000000000000000000
+          Position.X = 20.000000000000000000
           Position.Y = 132.000000000000000000
           Size.Width = 760.000000000000000000
           Size.Height = 30.000000000000000000
@@ -80,8 +80,8 @@ object RSignFrameSigningSettings: TRSignFrameSigningSettings
         end
         object LabelTimestamp: TLabel
           StyledSettings = []
-          Opacity = 0.800000011920929000
-          Position.X = 16.000000000000000000
+          Opacity = 0.800000011920928900
+          Position.X = 20.000000000000000000
           Position.Y = 176.000000000000000000
           Size.Width = 280.000000000000000000
           Size.Height = 22.000000000000000000
@@ -107,7 +107,7 @@ object RSignFrameSigningSettings: TRSignFrameSigningSettings
         end
         object FCheckVerificarAoFinal: TCheckBox
           StyledSettings = [Family, Size, Style]
-          Position.X = 16.000000000000000000
+          Position.X = 20.000000000000000000
           Position.Y = 248.000000000000000000
           Size.Width = 760.000000000000000000
           Size.Height = 30.000000000000000000
@@ -118,7 +118,7 @@ object RSignFrameSigningSettings: TRSignFrameSigningSettings
         end
         object FCheckPermitirSemTimestamp: TCheckBox
           StyledSettings = [Family, Size, Style]
-          Position.X = 16.000000000000000000
+          Position.X = 20.000000000000000000
           Position.Y = 292.000000000000000000
           Size.Width = 760.000000000000000000
           Size.Height = 30.000000000000000000
@@ -129,8 +129,8 @@ object RSignFrameSigningSettings: TRSignFrameSigningSettings
         end
         object LabelModoOperacao: TLabel
           StyledSettings = []
-          Opacity = 0.800000011920929000
-          Position.X = 16.000000000000000000
+          Opacity = 0.800000011920928900
+          Position.X = 20.000000000000000000
           Position.Y = 336.000000000000000000
           Size.Width = 280.000000000000000000
           Size.Height = 22.000000000000000000
@@ -142,8 +142,8 @@ object RSignFrameSigningSettings: TRSignFrameSigningSettings
         end
         object LabelModoLog: TLabel
           StyledSettings = []
-          Opacity = 0.800000011920929000
-          Position.X = 376.000000000000000000
+          Opacity = 0.800000011920928900
+          Position.X = 380.000000000000000000
           Position.Y = 336.000000000000000000
           Size.Width = 280.000000000000000000
           Size.Height = 22.000000000000000000

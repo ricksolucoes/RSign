@@ -26,6 +26,7 @@ type
     FEditDiretorioEntradaLote: TEdit;
     FEditDiretorioSaida: TEdit;
     FCheckMesmoDiretorio: TCheckBox;
+    procedure FCheckMesmoDiretorioChange(Sender: TObject);
   public
     procedure ApplyConfiguration(const AConfiguracao: TConfiguracaoCaminhos);
     function BuildConfiguration: TConfiguracaoCaminhos;
@@ -43,6 +44,7 @@ begin
   FEditDiretorioEntradaLote.Text := AConfiguracao.DiretorioEntradaLote;
   FEditDiretorioSaida.Text := AConfiguracao.DiretorioSaida;
   FCheckMesmoDiretorio.IsChecked := AConfiguracao.UsarMesmoDiretorioDoOriginal;
+  FEditDiretorioSaida.Enabled := not FCheckMesmoDiretorio.IsChecked;
 end;
 
 function TRSignFramePaths.BuildConfiguration: TConfiguracaoCaminhos;
@@ -54,6 +56,17 @@ begin
   Result.DiretorioEntradaLote := Trim(FEditDiretorioEntradaLote.Text);
   Result.DiretorioSaida := Trim(FEditDiretorioSaida.Text);
   Result.UsarMesmoDiretorioDoOriginal := FCheckMesmoDiretorio.IsChecked;
+end;
+
+procedure TRSignFramePaths.FCheckMesmoDiretorioChange(Sender: TObject);
+begin
+  FEditDiretorioSaida.Enabled := not FCheckMesmoDiretorio.IsChecked;
+
+  TThread.ForceQueue(nil, procedure
+  begin
+    if FEditDiretorioSaida.CanFocus then
+      FEditDiretorioSaida.SetFocus;
+  end);
 end;
 
 end.

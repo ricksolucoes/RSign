@@ -153,6 +153,12 @@ begin
     LRectangle.Fill.Color := $FF65734F;
     TTabControl(Sender).Tabs[I].TextSettings.FontColor := $FFFFFFFF;
   end;
+
+  if not (TTabControl(Sender).ActiveTab = FTabCaminhos) then
+    Exit;
+
+  FFramePaths.FEditCaminhoArquivoEntrada.Enabled := (FFrameSigningSettings.ComboModoOperacao.SelectedIndex = 0);
+  FFramePaths.FEditDiretorioEntradaLote.Enabled := (FFrameSigningSettings.ComboModoOperacao.SelectedIndex = 1);
 end;
 
 procedure TRSignMainForm.RegistrarCallbackLog;
