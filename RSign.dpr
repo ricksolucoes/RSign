@@ -26,7 +26,8 @@ uses
   RSign.Services.UserDecision in 'src\Services\RSign.Services.UserDecision.pas',
   RSign.Services.FileSigning in 'src\Services\RSign.Services.FileSigning.pas',
   RSign.Services.Signing in 'src\Services\RSign.Services.Signing.pas',
-  RSign.Services.SigningVerification in 'src\Services\RSign.Services.SigningVerification.pas';
+  RSign.Services.SigningVerification in 'src\Services\RSign.Services.SigningVerification.pas',
+  RSign.UI.Loading in 'src\UI\RSign.UI.Loading.pas';
 
 {$R *.res}
 

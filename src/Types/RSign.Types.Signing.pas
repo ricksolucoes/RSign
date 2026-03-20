@@ -58,7 +58,24 @@ type
     class function Empty: TResultadoAssinatura; static;
   end;
 
+  TResumoFinalOperacao = record
+    TotalArquivosRecebidos: Integer;
+    TotalArquivosValidos: Integer;
+    TotalArquivosBloqueados: Integer;
+    TotalArquivosAssinadosComTimestamp: Integer;
+    TotalArquivosAssinadosSemTimestamp: Integer;
+    TotalArquivosComRessalva: Integer;
+    TotalArquivosComFalha: Integer;
+    SucessoGeral: Boolean;
+    MensagemFinal: string;
+    class function Empty: TResumoFinalOperacao; static;
+    function ToMensagemUsuario: string;
+  end;
+
 implementation
+
+uses
+  System.SysUtils;
 
 class function TStatusSignTool.Empty: TStatusSignTool;
 begin
@@ -109,4 +126,34 @@ begin
   Result.MensagemAmigavel := '';
 end;
 
+class function TResumoFinalOperacao.Empty: TResumoFinalOperacao;
+begin
+  Result.TotalArquivosRecebidos := 0;
+  Result.TotalArquivosValidos := 0;
+  Result.TotalArquivosBloqueados := 0;
+  Result.TotalArquivosAssinadosComTimestamp := 0;
+  Result.TotalArquivosAssinadosSemTimestamp := 0;
+  Result.TotalArquivosComRessalva := 0;
+  Result.TotalArquivosComFalha := 0;
+  Result.SucessoGeral := False;
+  Result.MensagemFinal := '';
+end;
+
+function TResumoFinalOperacao.ToMensagemUsuario: string;
+begin
+  Result :=
+    'Resumo final da operação' + sLineBreak +
+    'Arquivos recebidos: ' + IntToStr(TotalArquivosRecebidos) + sLineBreak +
+    'Arquivos válidos: ' + IntToStr(TotalArquivosValidos) + sLineBreak +
+    'Arquivos bloqueados: ' + IntToStr(TotalArquivosBloqueados) + sLineBreak +
+    'Assinados com timestamp: ' + IntToStr(TotalArquivosAssinadosComTimestamp) + sLineBreak +
+    'Assinados sem timestamp: ' + IntToStr(TotalArquivosAssinadosSemTimestamp) + sLineBreak +
+    'Arquivos com ressalva: ' + IntToStr(TotalArquivosComRessalva) + sLineBreak +
+    'Arquivos com falha: ' + IntToStr(TotalArquivosComFalha);
+
+  if Trim(MensagemFinal) <> '' then
+    Result := Result + sLineBreak + sLineBreak + MensagemFinal;
+end;
+
 end.
+

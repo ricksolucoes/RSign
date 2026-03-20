@@ -74,6 +74,7 @@ type
     procedure SaveConfiguration(const AConfiguracao: TConfiguracaoAplicacao);
     procedure ValidateConfiguration(const AConfiguracao: TConfiguracaoAplicacao);
     procedure Execute(const AConfiguracao: TConfiguracaoAplicacao);
+    function GetUltimoResumoOperacao: TResumoFinalOperacao;
   end;
 
 implementation
