@@ -88,8 +88,8 @@ begin
   Result.UsarVersaoMaisNova := True;
   Result.UrlTimestamp := _DEFAULT_TIMESTAMP_URL;
   Result.VerificarAssinaturaAoFinal := True;
-  Result.PermitirContinuarSemTimestamp := False;
-  Result.ModoOperacaoArquivos := TModoOperacaoArquivos.Unico;
+  Result.PermitirContinuarSemTimestamp := True;
+  Result.ModoOperacaoArquivos := TModoOperacaoArquivos.Lote;
   Result.ModoSaidaLog := TModoSaidaLog.Ambos;
 end;
 

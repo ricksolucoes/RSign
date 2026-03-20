@@ -75,6 +75,7 @@ type
     procedure OnClickExecutar(Sender: TObject);
     procedure OnChangeTabControl(Sender: TObject);
     procedure OnClickFechar(Sender: TObject);
+    procedure SetUIEnabled(const AEnabled: Boolean);
   protected
     procedure DoCreate;
     procedure DoDestroy;
@@ -137,34 +138,46 @@ var
   I: Integer;
   LRectangle: TRectangle;
 begin
-  for I := 0 to TTabControl(Sender).TabCount - 1 do
-  begin
-    LRectangle := TTabControl(Sender).Tabs[I].FindStyleResource('Rectangle1Style') as TRectangle;
+  SetUIEnabled(False);
+  try
 
-    if not Assigned(LRectangle) then
-      Continue;
+    for I := 0 to TTabControl(Sender).TabCount - 1 do
+    begin
+      LRectangle := TTabControl(Sender).Tabs[I].FindStyleResource('Rectangle1Style') as TRectangle;
 
-    LRectangle.Fill.Color := $FFE3E8DD;
-    TTabControl(Sender).Tabs[I].TextSettings.FontColor := $FF243228;
+      if not Assigned(LRectangle) then
+        Continue;
 
-    if not (I = TTabControl(Sender).TabIndex) then
-      Continue;
+      LRectangle.Fill.Color := $FFE3E8DD;
+      TTabControl(Sender).Tabs[I].TextSettings.FontColor := $FF243228;
 
-    LRectangle.Fill.Color := $FF65734F;
-    TTabControl(Sender).Tabs[I].TextSettings.FontColor := $FFFFFFFF;
+      if not (I = TTabControl(Sender).TabIndex) then
+        Continue;
+
+      LRectangle.Fill.Color := $FF65734F;
+      TTabControl(Sender).Tabs[I].TextSettings.FontColor := $FFFFFFFF;
+    end;
+
+    if not (TTabControl(Sender).ActiveTab = FTabCaminhos) then
+      Exit;
+
+    FFramePaths.FEditCaminhoArquivoEntrada.Enabled := (FFrameSigningSettings.ComboModoOperacao.SelectedIndex = 0);
+    FFramePaths.FEditDiretorioEntradaLote.Enabled := (FFrameSigningSettings.ComboModoOperacao.SelectedIndex = 1);
+  finally
+    SetUIEnabled(True);
   end;
-
-  if not (TTabControl(Sender).ActiveTab = FTabCaminhos) then
-    Exit;
-
-  FFramePaths.FEditCaminhoArquivoEntrada.Enabled := (FFrameSigningSettings.ComboModoOperacao.SelectedIndex = 0);
-  FFramePaths.FEditDiretorioEntradaLote.Enabled := (FFrameSigningSettings.ComboModoOperacao.SelectedIndex = 1);
 end;
 
 procedure TRSignMainForm.RegistrarCallbackLog;
 begin
   if Assigned(FLoggerClass) then
     FLoggerClass.SetOnLog(AdicionarLinhaLog);
+end;
+
+procedure TRSignMainForm.SetUIEnabled(const AEnabled: Boolean);
+begin
+  FClientLayout.Enabled := AEnabled;
+  FToolBar.Enabled := AEnabled;
 end;
 
 procedure TRSignMainForm.AdicionarLinhaLog(const ALinhaLog: string);
@@ -207,18 +220,23 @@ end;
 
 procedure TRSignMainForm.OnClickCarregar(Sender: TObject);
 begin
+  SetUIEnabled(False);
   try
-    CarregarConfiguracao;
-  except
-    on E: Exception do
-      TDialogService.MessageDialog(
-        'Falha ao carregar a configuração: ' + E.Message,
-        TMsgDlgType.mtError,
-        [TMsgDlgBtn.mbOK],
-        TMsgDlgBtn.mbOK,
-        0,
-        nil
-      );
+    try
+      CarregarConfiguracao;
+    except
+      on E: Exception do
+        TDialogService.MessageDialog(
+          'Falha ao carregar a configuração: ' + E.Message,
+          TMsgDlgType.mtError,
+          [TMsgDlgBtn.mbOK],
+          TMsgDlgBtn.mbOK,
+          0,
+          nil
+        );
+    end;
+  finally
+    SetUIEnabled(True);
   end;
 end;
 
@@ -226,29 +244,34 @@ procedure TRSignMainForm.OnClickSalvar(Sender: TObject);
 var
   LConfiguracao: TConfiguracaoAplicacao;
 begin
+  SetUIEnabled(False);
   try
-    LConfiguracao := MontarConfiguracaoDaTela;
-    FOrchestratorClass.SaveConfiguration(LConfiguracao);
-    FConfiguracaoAtual := LConfiguracao;
+    try
+      LConfiguracao := MontarConfiguracaoDaTela;
+      FOrchestratorClass.SaveConfiguration(LConfiguracao);
+      FConfiguracaoAtual := LConfiguracao;
 
-    TDialogService.MessageDialog(
-      'Configuração salva com sucesso.',
-      TMsgDlgType.mtInformation,
-      [TMsgDlgBtn.mbOK],
-      TMsgDlgBtn.mbOK,
-      0,
-      nil
-    );
-  except
-    on E: Exception do
       TDialogService.MessageDialog(
-        'Falha ao salvar a configuração: ' + E.Message,
-        TMsgDlgType.mtError,
+        'Configuração salva com sucesso.',
+        TMsgDlgType.mtInformation,
         [TMsgDlgBtn.mbOK],
         TMsgDlgBtn.mbOK,
         0,
         nil
       );
+    except
+      on E: Exception do
+        TDialogService.MessageDialog(
+          'Falha ao salvar a configuração: ' + E.Message,
+          TMsgDlgType.mtError,
+          [TMsgDlgBtn.mbOK],
+          TMsgDlgBtn.mbOK,
+          0,
+          nil
+        );
+    end;
+  finally
+    SetUIEnabled(True);
   end;
 end;
 
@@ -256,32 +279,39 @@ procedure TRSignMainForm.OnClickValidar(Sender: TObject);
 var
   LConfiguracao: TConfiguracaoAplicacao;
 begin
+  SetUIEnabled(False);
   try
-    LConfiguracao := MontarConfiguracaoDaTela;
-    FOrchestratorClass.ValidateConfiguration(LConfiguracao);
-    TDialogService.MessageDialog(
-      'Validação inicial concluída com sucesso.',
-      TMsgDlgType.mtInformation,
-      [TMsgDlgBtn.mbOK],
-      TMsgDlgBtn.mbOK,
-      0,
-      nil
-    );
-  except
-    on E: Exception do
+
+    try
+      LConfiguracao := MontarConfiguracaoDaTela;
+      FOrchestratorClass.ValidateConfiguration(LConfiguracao);
       TDialogService.MessageDialog(
-        'Falha na validação: ' + E.Message,
-        TMsgDlgType.mtError,
+        'Validação inicial concluída com sucesso.',
+        TMsgDlgType.mtInformation,
         [TMsgDlgBtn.mbOK],
         TMsgDlgBtn.mbOK,
         0,
         nil
       );
+    except
+      on E: Exception do
+        TDialogService.MessageDialog(
+          'Falha na validação: ' + E.Message,
+          TMsgDlgType.mtError,
+          [TMsgDlgBtn.mbOK],
+          TMsgDlgBtn.mbOK,
+          0,
+          nil
+        );
+    end;
+  finally
+    SetUIEnabled(True);
   end;
 end;
 
 procedure TRSignMainForm.OnClickFechar(Sender: TObject);
 begin
+  SetUIEnabled(False);
   Application.Terminate;
 end;
 
@@ -289,28 +319,34 @@ procedure TRSignMainForm.OnClickExecutar(Sender: TObject);
 var
   LConfiguracao: TConfiguracaoAplicacao;
 begin
+  SetUIEnabled(False);
   try
-    LConfiguracao := MontarConfiguracaoDaTela;
-    FOrchestratorClass.Execute(LConfiguracao);
-    FConfiguracaoAtual := LConfiguracao;
-    TDialogService.MessageDialog(
-      'Execução da fase inicial concluída. Verifique o log para detalhes.',
-      TMsgDlgType.mtInformation,
-      [TMsgDlgBtn.mbOK],
-      TMsgDlgBtn.mbOK,
-      0,
-      nil
-    );
-  except
-    on E: Exception do
+
+    try
+      LConfiguracao := MontarConfiguracaoDaTela;
+      FOrchestratorClass.Execute(LConfiguracao);
+      FConfiguracaoAtual := LConfiguracao;
       TDialogService.MessageDialog(
-        'Falha ao executar a operação: ' + E.Message,
-        TMsgDlgType.mtError,
+        'Execução da fase inicial concluída. Verifique o log para detalhes.',
+        TMsgDlgType.mtInformation,
         [TMsgDlgBtn.mbOK],
         TMsgDlgBtn.mbOK,
         0,
         nil
       );
+    except
+      on E: Exception do
+        TDialogService.MessageDialog(
+          'Falha ao executar a operação: ' + E.Message,
+          TMsgDlgType.mtError,
+          [TMsgDlgBtn.mbOK],
+          TMsgDlgBtn.mbOK,
+          0,
+          nil
+        );
+    end;
+  finally
+    SetUIEnabled(True);
   end;
 end;
 

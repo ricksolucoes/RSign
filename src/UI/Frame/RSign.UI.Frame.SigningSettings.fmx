@@ -124,7 +124,7 @@ object RSignFrameSigningSettings: TRSignFrameSigningSettings
           Size.Height = 30.000000000000000000
           Size.PlatformDefault = False
           TabOrder = 5
-          Text = 'Permitir continuar sem timestamp ap'#243's confirma'#231#227'o do usu'#225'rio'
+          Text = 'Permitir continuar sem timestamp ap'#243's confirma'#231#227'o'
           TextSettings.FontColor = xFF1F281D
         end
         object LabelModoOperacao: TLabel

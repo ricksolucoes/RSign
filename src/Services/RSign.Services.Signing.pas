@@ -5,8 +5,11 @@ interface
 uses
   System.SysUtils,
   System.IOUtils,
+
   RSign.Core.Interfaces,
+
   RSign.Types.Config,
+  RSign.Types.Common,
   RSign.Types.Signing;
 
 type
@@ -19,6 +22,7 @@ type
     function MontarParametrosSignTool(const AConfiguracao: TConfiguracaoAplicacao; const ACaminhoArquivoAlvo: string; AUsarTimestamp: Boolean): string;
     function PrepararArquivosFisicos(const AItemArquivo: TItemArquivoAssinatura; out ACaminhoArquivoAlvo: string; out AMensagemErro: string): Boolean;
     procedure RestaurarArquivosAposFalha(const AItemArquivo: TItemArquivoAssinatura; const ACaminhoArquivoAlvo: string);
+    function FalhaRelacionadaAoTimestamp(const AResultadoProcesso: TResultadoProcessoExterno): Boolean;
   protected
     constructor Create(const ALogger: ILoggerService; const AProcessExecutor: IProcessExecutor; const ASignToolService: ISignToolService);
     function Assinar(const AConfiguracao: TConfiguracaoAplicacao; const AItemArquivo: TItemArquivoAssinatura): TResultadoAssinatura;
@@ -28,12 +32,26 @@ type
 
 implementation
 
-uses
-  RSign.Types.Common;
-
 function TSigningService.DelimitarParametro(const AValor: string): string;
 begin
   Result := '"' + Trim(AValor) + '"';
+end;
+
+function TSigningService.FalhaRelacionadaAoTimestamp(
+  const AResultadoProcesso: TResultadoProcessoExterno): Boolean;
+var
+  LTextoRetorno: string;
+begin
+  LTextoRetorno := UpperCase(
+    Trim(AResultadoProcesso.SaidaPadrao + sLineBreak + AResultadoProcesso.ErroPadrao)
+  );
+
+  Result :=
+    (Pos('TIMESTAMP', LTextoRetorno) > 0) or
+    (Pos('TIME-STAMP', LTextoRetorno) > 0) or
+    (Pos('TSA', LTextoRetorno) > 0) or
+    (Pos('RFC3161', LTextoRetorno) > 0) or
+    (Pos('/TR', LTextoRetorno) > 0);
 end;
 
 constructor TSigningService.Create(const ALogger: ILoggerService; const AProcessExecutor: IProcessExecutor; const ASignToolService: ISignToolService);
@@ -225,38 +243,26 @@ begin
     Exit;
   end;
 
-  if LUsouTimestamp and AConfiguracao.Assinatura.PermitirContinuarSemTimestamp then
+  if LUsouTimestamp and
+     AConfiguracao.Assinatura.PermitirContinuarSemTimestamp and
+     FalhaRelacionadaAoTimestamp(LResultadoProcesso) then
   begin
+    Result.MensagemAmigavel :=
+      'Não foi possível concluir a assinatura com timestamp.' + sLineBreak + sLineBreak +
+      'Deseja tentar novamente sem timestamp?';
+
+    if Result.MensagemTecnica = '' then
+      Result.MensagemTecnica := Trim(LResultadoProcesso.SaidaPadrao);
+
     if Assigned(FLogger) then
-      FLogger.Warning('Signing', 'A assinatura com timestamp falhou. Será realizada nova tentativa sem timestamp.', Result.MensagemTecnica);
+      FLogger.Warning(
+        'Signing',
+        'A assinatura com timestamp falhou e requer decisão do usuário.',
+        Result.MensagemTecnica
+      );
 
-    LParametrosSignTool := MontarParametrosSignTool(AConfiguracao, LCaminhoArquivoAlvo, False);
-
-    LResultadoProcesso := FProcessExecutor.Execute(
-      LStatusSignTool.CaminhoFinal,
-      LParametrosSignTool,
-      ExtractFilePath(LCaminhoArquivoAlvo),
-      60000
-    );
-
-    Result.CodigoRetorno := LResultadoProcesso.CodigoSaida;
-    Result.ComandoExecutado := LResultadoProcesso.ComandoExecutado;
-    Result.SaidaPadrao := LResultadoProcesso.SaidaPadrao;
-    Result.ErroPadrao := LResultadoProcesso.ErroPadrao;
-    Result.Sucesso := LResultadoProcesso.Sucesso;
-    Result.AssinaturaAplicada := LResultadoProcesso.Sucesso;
-    Result.TimestampAplicado := False;
-    Result.MensagemTecnica := Trim(LResultadoProcesso.ErroPadrao);
-
-    if Result.Sucesso then
-    begin
-      Result.MensagemAmigavel := 'O arquivo foi assinado com sucesso sem timestamp.';
-
-      if Assigned(FLogger) then
-        FLogger.Warning('Signing', Result.MensagemAmigavel);
-
-      Exit;
-    end;
+    RestaurarArquivosAposFalha(AItemArquivo, LCaminhoArquivoAlvo);
+    Exit;
   end;
 
   Result.MensagemAmigavel := 'Falha ao assinar o arquivo.';

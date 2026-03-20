@@ -109,6 +109,7 @@ var
   LSigningService: ISigningService;
   LResultadoAssinatura: TResultadoAssinatura;
   LSigningVerificationService: ISigningVerificationService;
+  LConfiguracaoSemTimestamp: TConfiguracaoAplicacao;
 begin
   ValidateConfiguration(AConfiguracao);
 
@@ -314,6 +315,51 @@ begin
 
     LResultadoAssinatura := LSigningService.Assinar(AConfiguracao, LItemArquivoAssinatura);
 
+    if (not LResultadoAssinatura.Sucesso) and
+       AConfiguracao.Assinatura.PermitirContinuarSemTimestamp and
+       (Pos('tentar novamente sem timestamp', LowerCase(LResultadoAssinatura.MensagemAmigavel)) > 0) then
+    begin
+      if not Assigned(FUserDecisionService) then
+      begin
+        FLogger.Error(
+          'Orchestrator',
+          'Falha na assinatura com timestamp e não há serviço de decisão do usuário configurado.',
+          LResultadoAssinatura.MensagemTecnica
+        );
+
+        raise Exception.Create(LResultadoAssinatura.MensagemAmigavel);
+      end;
+
+      if FUserDecisionService.Confirmar(
+        'Falha no timestamp',
+        LResultadoAssinatura.MensagemAmigavel,
+        LResultadoAssinatura.MensagemTecnica
+      ) then
+      begin
+        FLogger.Warning(
+          'Orchestrator',
+          'O usuário optou por continuar a assinatura sem timestamp.',
+          LResultadoAssinatura.MensagemTecnica
+        );
+
+        LConfiguracaoSemTimestamp := AConfiguracao;
+        LConfiguracaoSemTimestamp.Assinatura.UrlTimestamp := '';
+        LConfiguracaoSemTimestamp.Assinatura.PermitirContinuarSemTimestamp := False;
+
+        LResultadoAssinatura := LSigningService.Assinar(LConfiguracaoSemTimestamp, LItemArquivoAssinatura);
+      end
+      else
+      begin
+        FLogger.Warning(
+          'Orchestrator',
+          'O usuário cancelou a assinatura após a falha no timestamp.',
+          LResultadoAssinatura.MensagemTecnica
+        );
+
+        raise Exception.Create('A assinatura foi cancelada porque o timestamp não pôde ser aplicado.');
+      end;
+    end;
+
     if not LResultadoAssinatura.Sucesso then
     begin
       FLogger.Error(
@@ -328,10 +374,16 @@ begin
       raise Exception.Create('Falha na assinatura real. Verifique o log para detalhes.');
     end;
 
-    FLogger.Success(
-      'Orchestrator',
-      'Arquivo assinado com sucesso: ' + LItemArquivoAssinatura.NomeArquivo
-    );
+    if LResultadoAssinatura.TimestampAplicado then
+      FLogger.Success(
+        'Orchestrator',
+        'Arquivo assinado com sucesso: ' + LItemArquivoAssinatura.NomeArquivo
+      )
+    else
+      FLogger.Warning(
+        'Orchestrator',
+        'Arquivo assinado com sucesso sem timestamp: ' + LItemArquivoAssinatura.NomeArquivo
+      );
 
     if Trim(LResultadoAssinatura.ArquivoAlvo) <> '' then
       FLogger.Debug('Orchestrator', 'Arquivo assinado final: ' + LResultadoAssinatura.ArquivoAlvo);
