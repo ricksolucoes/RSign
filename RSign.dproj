@@ -199,6 +199,7 @@
         <DCCReference Include="src\Services\RSign.Services.UserDecision.pas"/>
         <DCCReference Include="src\Services\RSign.Services.FileSigning.pas"/>
         <DCCReference Include="src\Services\RSign.Services.Signing.pas"/>
+        <DCCReference Include="src\Services\RSign.Services.SigningVerification.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

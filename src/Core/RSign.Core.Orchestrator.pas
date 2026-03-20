@@ -1,5 +1,5 @@
 ﻿unit RSign.Core.Orchestrator;
-
+
 interface
 
 uses
@@ -15,7 +15,8 @@ uses
   RSign.Services.SignTool,
   RSign.Services.Certificate,
   RSign.Services.FileSigning,
-  RSign.Services.ProcessExecutor;
+  RSign.Services.ProcessExecutor,
+  RSign.Services.SigningVerification;
 
 type
   TOrchestrator = class(TInterfacedObject, IOrchestrator)
@@ -104,9 +105,10 @@ var
   LItensArquivoAssinatura: TItensArquivoAssinatura;
   LItemArquivoAssinatura: TItemArquivoAssinatura;
   LQuantidadeArquivosValidos: Integer;
-  LIdentificacaoArquivo : string;
+  LIdentificacaoArquivo: string;
   LSigningService: ISigningService;
   LResultadoAssinatura: TResultadoAssinatura;
+  LSigningVerificationService: ISigningVerificationService;
 begin
   ValidateConfiguration(AConfiguracao);
 
@@ -301,6 +303,7 @@ begin
   );
 
   LSigningService := TSigningService.New(FLogger, LProcessExecutor, LSignToolService);
+  LSigningVerificationService := TSigningVerificationService.New(FLogger, LProcessExecutor, LSignToolService);
 
   for LItemArquivoAssinatura in LItensArquivoAssinatura do
   begin
@@ -335,8 +338,54 @@ begin
 
     if Trim(LResultadoAssinatura.ComandoExecutado) <> '' then
       FLogger.Debug('Orchestrator', 'Comando executado: ' + LResultadoAssinatura.ComandoExecutado);
+
+    if AConfiguracao.Assinatura.VerificarAssinaturaAoFinal then
+    begin
+      LResultadoAssinatura := LSigningVerificationService.Verificar(AConfiguracao, LResultadoAssinatura);
+
+      if not LResultadoAssinatura.VerificacaoExecutada then
+      begin
+        FLogger.Error(
+          'Orchestrator',
+          'A verificação pós-assinatura não pôde ser executada para o arquivo: ' + LItemArquivoAssinatura.NomeArquivo,
+          LResultadoAssinatura.MensagemTecnica
+        );
+
+        if Trim(LResultadoAssinatura.MensagemAmigavel) <> '' then
+          raise Exception.Create(LResultadoAssinatura.MensagemAmigavel);
+
+        raise Exception.Create('Falha na verificação pós-assinatura. Verifique o log para detalhes.');
+      end;
+
+      if not LResultadoAssinatura.VerificacaoAprovada then
+      begin
+        FLogger.Error(
+          'Orchestrator',
+          'A verificação pós-assinatura falhou para o arquivo: ' + LItemArquivoAssinatura.NomeArquivo,
+          LResultadoAssinatura.MensagemTecnica
+        );
+
+        if Trim(LResultadoAssinatura.MensagemAmigavel) <> '' then
+          raise Exception.Create(LResultadoAssinatura.MensagemAmigavel);
+
+        raise Exception.Create('Falha na verificação pós-assinatura. Verifique o log para detalhes.');
+      end;
+
+      if Pos('autoassinado não é confiado', LowerCase(LResultadoAssinatura.MensagemAmigavel)) > 0 then
+        FLogger.Warning(
+          'Orchestrator',
+          'Verificação pós-assinatura concluída com ressalva para o arquivo: ' + LItemArquivoAssinatura.NomeArquivo,
+          LResultadoAssinatura.MensagemTecnica
+        )
+      else
+        FLogger.Success(
+          'Orchestrator',
+          'Verificação pós-assinatura concluída com sucesso para o arquivo: ' + LItemArquivoAssinatura.NomeArquivo
+        );
+    end;
   end;
 end;
 
 end.
 
+
