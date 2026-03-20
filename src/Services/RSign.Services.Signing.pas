@@ -192,9 +192,15 @@ begin
   if not PrepararArquivosFisicos(AItemArquivo, LCaminhoArquivoAlvo, LMensagemErro) then
   begin
     Result.MensagemTecnica := LMensagemErro;
-    Result.MensagemAmigavel := 'Já existe um arquivo com o mesmo nome na pasta de destino da assinatura.'
-                                + sLineBreak + sLineBreak +
-                                'Remova o arquivo existente ou escolha outra pasta de saída.';
+
+    if SameText(Trim(LMensagemErro), 'Já existe um arquivo no destino final da assinatura.') then
+      Result.MensagemAmigavel :=
+        'Já existe um arquivo com o mesmo nome na pasta de destino da assinatura.' + sLineBreak + sLineBreak +
+        'Deseja apagar o arquivo existente e tentar novamente?'
+    else
+      Result.MensagemAmigavel := 'Ainda existe um arquivo com o mesmo nome na pasta de destino da assinatura.'
+                                  + sLineBreak + sLineBreak +
+                                  'Remova o arquivo existente ou escolha outra pasta de saída.';
     Exit;
   end;
 

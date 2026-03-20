@@ -3,7 +3,9 @@
 interface
 
 uses
+  System.IOUtils,
   System.SysUtils,
+
   RSign.Core.Interfaces,
 
   RSign.Types.Common,
@@ -145,8 +147,13 @@ var
   LResultadoAssinatura: TResultadoAssinatura;
   LSigningVerificationService: ISigningVerificationService;
   LConfiguracaoSemTimestamp: TConfiguracaoAplicacao;
+  LMensagemArquivoExistenteNaSaida : string;
 begin
   ResetarUltimoResumoOperacao;
+
+  LMensagemArquivoExistenteNaSaida :=
+    'Já existe um arquivo com o mesmo nome na pasta de destino da assinatura.' + sLineBreak + sLineBreak +
+    'Remova o arquivo existente ou escolha outra pasta de saída.';
 
   try
     ValidateConfiguration(AConfiguracao);
@@ -356,6 +363,72 @@ begin
       FLogger.Info('Orchestrator', 'Iniciando a assinatura real do arquivo: ' + LItemArquivoAssinatura.NomeArquivo);
 
       LResultadoAssinatura := LSigningService.Assinar(AConfiguracao, LItemArquivoAssinatura);
+
+      if (not LResultadoAssinatura.Sucesso) and
+         (Pos('apagar o arquivo existente e tentar novamente', LowerCase(LResultadoAssinatura.MensagemAmigavel)) > 0) then
+      begin
+        if not Assigned(FUserDecisionService) then
+        begin
+          Inc(FUltimoResumoOperacao.TotalArquivosComFalha);
+          FLogger.Error(
+            'Orchestrator',
+            'Falha na assinatura porque já existe um arquivo na pasta de destino e não há serviço de decisão do usuário configurado.',
+            LResultadoAssinatura.MensagemTecnica
+          );
+
+          raise Exception.Create(LMensagemArquivoExistenteNaSaida);
+        end;
+
+        if FUserDecisionService.Confirmar(
+          'Arquivo já existe na saída',
+          LResultadoAssinatura.MensagemAmigavel,
+          LResultadoAssinatura.MensagemTecnica
+        ) then
+        begin
+          FLogger.Warning(
+            'Orchestrator',
+            'O usuário optou por apagar o arquivo existente na pasta de destino e tentar novamente.',
+            LResultadoAssinatura.MensagemTecnica
+          );
+
+          try
+            if TFile.Exists(LItemArquivoAssinatura.CaminhoArquivoAssinadoFinal) then
+              TFile.Delete(LItemArquivoAssinatura.CaminhoArquivoAssinadoFinal);
+          except
+            on E: Exception do
+              FLogger.Warning(
+                'Orchestrator',
+                'Falha ao tentar apagar o arquivo existente na pasta de destino.',
+                E.Message
+              );
+          end;
+
+          if TFile.Exists(LItemArquivoAssinatura.CaminhoArquivoAssinadoFinal) then
+          begin
+            Inc(FUltimoResumoOperacao.TotalArquivosComFalha);
+            FLogger.Error(
+              'Orchestrator',
+              'Não foi possível apagar o arquivo existente na pasta de destino.',
+              LItemArquivoAssinatura.CaminhoArquivoAssinadoFinal
+            );
+
+            raise Exception.Create(LMensagemArquivoExistenteNaSaida);
+          end;
+
+          LResultadoAssinatura := LSigningService.Assinar(AConfiguracao, LItemArquivoAssinatura);
+        end
+        else
+        begin
+          Inc(FUltimoResumoOperacao.TotalArquivosComFalha);
+          FLogger.Warning(
+            'Orchestrator',
+            'O usuário optou por não apagar o arquivo existente na pasta de destino.',
+            LResultadoAssinatura.MensagemTecnica
+          );
+
+          raise Exception.Create(LMensagemArquivoExistenteNaSaida);
+        end;
+      end;
 
       if (not LResultadoAssinatura.Sucesso) and
          AConfiguracao.Assinatura.PermitirContinuarSemTimestamp and
